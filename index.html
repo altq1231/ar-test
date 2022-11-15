@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <meta
   name="viewport"
   content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
@@ -16,6 +16,21 @@
 <script src="vendor/three.js/GLTFLoader.js"></script>
 <style></style>
 <body style="margin: 0px; overflow: hidden; font-family: Monospace">
+  <!-- <div
+    style="
+      position: absolute;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+      z-index: 1;
+    "
+  >
+    <a href="https://github.com/AR-js-org/AR.js/" target="_blank">AR.js</a> -
+    three.js mobile performance
+    <br />
+    Contact me any time at
+    <a href="https://twitter.com/nicolocarp" target="_blank">@nicolocarp</a>
+  </div> -->
   <div
     style="
       position: absolute;
@@ -212,12 +227,12 @@
       "https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb",
       function (obj) {
         //设置模型位置
-        obj.scene.position.set(0, -1, 1);
-        obj.scene.scale.set(0.4, 0.4, 0.4);
+        obj.scene.position.set(0, 0.5, 1);
+        obj.scene.scale.set(0.2, 0.2, 0.2);
         // 旋转
-        obj.scene.rotation.x = (-90 * Math.PI) / 180;
-        console.log(11);
-        console.log(obj);
+        // obj.scene.rotation.x = (-90 * Math.PI) / 180;
+
+        console.log("load model", obj);
 
         arWorldRoot.add(obj.scene);
 
