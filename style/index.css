@@ -36,7 +36,7 @@
   justify-content: center;
 }
 .operation-container .start-container .btn-container + .btn-container {
-  margin-left: 50px;
+  margin-left: 35px;
 }
 .operation-container .drop-container {
   align-items: center;
@@ -48,9 +48,9 @@
   height: 90px;
 }
 .operation-container .right-container {
-  flex: 0 0 200px;
-  width: 200px;
-  padding-left: 20px;
+  flex: 0 0 210px;
+  width: 210px;
+  padding-left: 30px;
 }
 .operation-container .right-container .direction-item {
   align-items: center;
