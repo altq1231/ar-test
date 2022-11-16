@@ -724,10 +724,26 @@
       // 开始游戏
       function startGame() {
         console.log("startGame");
+        if (!haveStart) {
+          timer = setInterval(() => {
+            moveDown();
+          }, speed);
+          haveStart = true;
+        }
       }
       // 重新开始游戏
       function restartGame() {
-        console.log("restartGame");
+        if (haveStart) {
+          score = 0;
+          clearInterval(timer);
+          matrix.forEach((m) => {
+            m.forEach((n) => {
+              n.cube.visible = false;
+            });
+          });
+          generateCube();
+          haveStart = false;
+        }
       }
       // 旋转
       function rotateCell() {
@@ -784,7 +800,42 @@
       }
       // 向下移动
       function moveDown() {
-        console.log("moveDown");
+        let pos = currentCube.position;
+        let x, y;
+        let newpos = [];
+        let canMove = true;
+        for (let i = 0; i < pos.length; i++) {
+          (x = pos[i][0]), (y = pos[i][1]);
+          if (x + 1 <= 19) {
+            newpos.push([x + 1, y]);
+          } else {
+            break;
+          }
+        }
+        if (newpos.length == pos.length) {
+          //计算出变更前后两个矩阵的差集
+          let minus = minusMatrix(newpos, pos);
+          //判断变更的部分能否移动
+          for (let i = 0; i < minus.length; i++) {
+            if (matrix[minus[i][0]][minus[i][1]].cube.visible != false) {
+              canMove = false;
+              break;
+            }
+          }
+          if (canMove) {
+            canUpdate = true;
+            updateMartixView(newpos);
+            currentCube.position = newpos;
+          } else {
+            // 如果发生碰撞了,先消除
+            clearCubes();
+            generateCube();
+          }
+        } else {
+          // 如果到最底层了，重新生成图案
+          clearCubes();
+          generateCube();
+        }
       }
 
       //判断是否输了
@@ -798,11 +849,117 @@
         return num >= 3;
       }
       // 左右移动
-      function moveLeftAndRight(key) {
-        if (key === 0) {
-          console.log("moveLeft", key);
-        } else {
-          console.log("moveRight", key);
+      function moveLeftAndRight(type) {
+        let pos = currentCube.position;
+        let x, y;
+        let newpos = [];
+        let canMove = true;
+        let step = type == 0 ? -1 : 1;
+        for (let i = 0; i < pos.length; i++) {
+          (x = pos[i][0]), (y = pos[i][1]);
+          if (y + step >= 0 && y + step <= 9) {
+            newpos.push([x, y + step]);
+          } else {
+            break;
+          }
+        }
+        if (newpos.length == pos.length) {
+          //计算出变更前后两个矩阵的差集
+          let minus = minusMatrix(newpos, pos);
+          //判断变更的部分能否移动
+          for (let i = 0; i < minus.length; i++) {
+            if (matrix[minus[i][0]][minus[i][1]].cube.visible != false) {
+              canMove = false;
+              break;
+            }
+          }
+          if (canMove) {
+            canUpdate = true;
+            updateMartixView(newpos);
+            currentCube.position = newpos;
+          }
+        }
+      }
+
+      //更新视图矩阵
+      function updateMartixView(newpos) {
+        if (canUpdate) {
+          let pos;
+          //将之前的隐藏
+          for (let i = 0; i < currentCube.position.length; i++) {
+            pos = currentCube.position[i];
+            matrix[pos[0]][pos[1]].cube.visible = false;
+          }
+          //显示新的
+          for (let i = 0; i < newpos.length; i++) {
+            matrix[newpos[i][0]][newpos[i][1]].cube.visible = true;
+          }
+        }
+      }
+
+      //计算两个二维数组差集,用于判断变更后的部分能否移动
+      function minusMatrix(m1, m2) {
+        let arr = [];
+        let flag = true;
+        for (let i = 0; i < m1.length; i++) {
+          flag = true;
+          for (let j = 0; j < m2.length; j++) {
+            if (m1[i][0] == m2[j][0] && m1[i][1] == m2[j][1]) {
+              flag = false;
+              break;
+            }
+          }
+          if (flag) {
+            arr.push([m1[i][0], m1[i][1]]);
+          }
+        }
+        return arr;
+      }
+
+      // 清除某一行全部点亮的
+      function clearCubes() {
+        canUpdate = false;
+        let clear = false,
+          lineNumber = [];
+        for (let i = 0; i <= 19; i++) {
+          for (let j = 0; j <= 9; j++) {
+            // 判断某一行是否全部点亮
+            if (matrix[i][j].cube.visible == true) {
+              clear = true;
+            } else {
+              clear = false;
+              break;
+            }
+          }
+          if (clear) {
+            lineNumber.push(i);
+          }
+        }
+        if (lineNumber.length > 0) {
+          //加分
+          score += lineNumber.length * 10;
+          scoreLabel.material.map = new THREE.CanvasTexture(
+            generateSprite("score:" + this.score, "red")
+          );
+
+          //消除完整
+          for (let i = lineNumber.length - 1; i >= 0; i--) {
+            for (let j = 0; j <= 9; j++) {
+              matrix[lineNumber[i]][j].cube.visible = false;
+            }
+          }
+
+          //将上面的移动下来
+          for (let i = 0; i < lineNumber.length; i++) {
+            for (let j = lineNumber[i]; j >= 1; j--) {
+              for (let k = 0; k <= 9; k++) {
+                if (matrix[j - 1][k].cube.visible == true) {
+                  matrix[j - 1][k].cube.visible = false;
+                  matrix[j][k].cube.visible = true;
+                }
+              }
+            }
+          }
         }
       }
 
