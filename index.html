@@ -326,8 +326,8 @@
       });
       let TopAnBottomGeometry = new THREE.BufferGeometry();
       TopAnBottomGeometry.setFromPoints([
-        new THREE.Vector3(1, 1, 0),
-        new THREE.Vector3(1, 2, 0),
+        new THREE.Vector3(0, 1, 1),
+        new THREE.Vector3(0, 2, 1),
       ]);
       let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
       // scene.add(topLine);
@@ -435,52 +435,52 @@
 
       // add a torus knot
 
-      var geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
-      var material = new THREE.MeshNormalMaterial({
-        transparent: true,
-        opacity: 0.8,
-        side: THREE.DoubleSide,
-      });
-      var targets = [];
-      for (let i = 1; i <= 9; i++) {
-        let mesh = new THREE.Mesh(geometry, material);
-        let x = 0,
-          z = 0;
-        if (i % 3 == 1) {
-          x = -0.6;
-        }
-        if (i % 3 == 2) {
-          x = 0;
-        }
-        if (i % 3 == 0) {
-          x = 0.6;
-        }
-        if (i <= 3) {
-          z = -0.6;
-        }
-        if (i > 3 && i <= 6) {
-          z = 0;
-        }
-        if (i > 6 && i <= 9) {
-          z = 0.6;
-        }
-        mesh.position.set(x, 0.1, z);
-        targets.push(mesh);
-      }
+      // var geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+      // var material = new THREE.MeshNormalMaterial({
+      //   transparent: true,
+      //   opacity: 0.8,
+      //   side: THREE.DoubleSide,
+      // });
+      // var targets = [];
+      // for (let i = 1; i <= 9; i++) {
+      //   let mesh = new THREE.Mesh(geometry, material);
+      //   let x = 0,
+      //     z = 0;
+      //   if (i % 3 == 1) {
+      //     x = -0.6;
+      //   }
+      //   if (i % 3 == 2) {
+      //     x = 0;
+      //   }
+      //   if (i % 3 == 0) {
+      //     x = 0.6;
+      //   }
+      //   if (i <= 3) {
+      //     z = -0.6;
+      //   }
+      //   if (i > 3 && i <= 6) {
+      //     z = 0;
+      //   }
+      //   if (i > 6 && i <= 9) {
+      //     z = 0.6;
+      //   }
+      //   mesh.position.set(x, 0.1, z);
+      //   targets.push(mesh);
+      // }
 
-      targets.forEach((item, i) => {
-        arWorldRoot.add(item);
-        onRenderFctsmy["selfAnim" + i] = function () {
-          item.rotation.z += 0.05;
-        };
-      });
+      // targets.forEach((item, i) => {
+      //   arWorldRoot.add(item);
+      //   onRenderFctsmy["selfAnim" + i] = function () {
+      //     item.rotation.z += 0.05;
+      //   };
+      // });
 
-      var mid = 0.7;
-      var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
-      var gun = new THREE.Mesh(geometry2, material);
-      gun.position.set(0, 0.1 + mid, 1.2);
-      gun.rotation.x = (10 * Math.PI) / 180;
-      arWorldRoot.add(gun);
+      // var mid = 0.7;
+      // var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
+      // var gun = new THREE.Mesh(geometry2, material);
+      // gun.position.set(0, 0.1 + mid, 1.2);
+      // gun.rotation.x = (10 * Math.PI) / 180;
+      // arWorldRoot.add(gun);
 
       // 碰撞检测
       function hitTest(obj1, obj2) {
