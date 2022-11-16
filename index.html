@@ -581,6 +581,8 @@
         myobj.scene.position.y -= 1;
       }
 
+      generateCube();
+
       //生成下一个方块
       function generateCube() {
         // 判断是否输了
@@ -783,6 +785,17 @@
       // 向下移动
       function moveDown() {
         console.log("moveDown");
+      }
+
+      //判断是否输了
+      function isLose() {
+        let num = 0;
+        for (let i = 3; i <= 6; i++) {
+          if (matrix[0][i].cube.visible == true) {
+            num++;
+          }
+        }
+        return num >= 3;
       }
       // 左右移动
       function moveLeftAndRight(key) {
