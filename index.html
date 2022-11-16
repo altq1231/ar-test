@@ -580,7 +580,7 @@
       function goback() {
         myobj.scene.position.y -= 1;
       }
-
+      initCubes();
       generateCube();
 
       //生成下一个方块
@@ -800,6 +800,7 @@
       }
       // 向下移动
       function moveDown() {
+        console.log(currentCube);
         let pos = currentCube.position;
         let x, y;
         let newpos = [];
