@@ -690,7 +690,7 @@
           ) {
             mesh = mesh.clone(true);
             mesh.receiveShadow = true;
-            mesh.position.set(i, j, 0);
+            mesh.position.set(i, 0, j);
             mesh.visible = false;
             matrix[m][n] = {
               cube: mesh,
@@ -707,7 +707,7 @@
           nextMatrix[i] = [];
           for (let j = 0; j < 4; j++) {
             mesh = mesh.clone(true);
-            mesh.position.set((cubeWidth + seg) * i, (cubeWidth + seg) * j, 0);
+            mesh.position.set((cubeWidth + seg) * j, 0, (cubeWidth + seg) * i);
             nextMatrix[i][j] = mesh;
             nextCubes.add(mesh);
           }
