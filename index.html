@@ -92,6 +92,8 @@
       //		Init
       //////////////////////////////////////////////////////////////////////////////////
 
+      let width = window.innerWidth,
+        height = window.innerHeight;
       // init renderer
       var renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -119,7 +121,7 @@
       //////////////////////////////////////////////////////////////////////////////////
 
       // Create a camera
-      var camera = new THREE.Camera();
+      var camera = new THREE.PerspectiveCamera(60, width / height, 1, 10000);
       scene.add(camera);
 
       markerRoot = new THREE.Group();
@@ -152,6 +154,11 @@
         onResize();
       });
       function onResize() {
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.render(scene, camera);
+        renderer.setSize(width, height);
+
         arToolkitSource.onResizeElement();
         arToolkitSource.copyElementSizeTo(renderer.domElement);
         if (window.arToolkitContext.arController !== null) {
@@ -276,6 +283,113 @@
           myobj = obj;
         }
       );
+
+      // 设置一个方格长宽为20
+      let cubeWidth = 20;
+      // 横向10格，纵向20格, 间隙为4
+      let lineWidthSeg = 10,
+        lineHeightSeg = 20,
+        seg = 4;
+      // 计算外框线长与宽
+      let lineWidth = cubeWidth * lineWidthSeg + seg * (lineWidthSeg + 1);
+      let lineHeight = cubeWidth * lineHeightSeg + seg * (lineHeightSeg + 1);
+
+      // 存储方块的矩阵
+      let matrix = [],
+        nextMatrix = [];
+      // 定时器
+      let timer;
+
+      let raycaster = new THREE.Raycaster();
+      let mouse = new THREE.Vector2();
+
+      class Cube {
+        constructor(type, position) {
+          // 方块类型
+          this.type = type;
+          // 记录方块当前的位置信息
+          this.position = position;
+        }
+      }
+
+      let haveStart = false;
+      let currentCube = null;
+      let nextCube = null;
+      let score = 0;
+      let speed = 500;
+      let scoreLabel;
+      let canUpdate = false;
+      initRectLine();
+
+      //初始化轮廓线
+      function initRectLine() {
+        let rect = new THREE.Group();
+
+        let lineMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+        });
+
+        let TopAnBottomGeometry = new THREE.BufferGeometry();
+        let LeftAndRightGeometry = new THREE.BufferGeometry();
+
+        TopAnBottomGeometry.setFromPoints([
+          new THREE.Vector3(-lineWidth, lineHeight / 2, 0),
+          new THREE.Vector3(0, lineHeight / 2, 0),
+        ]);
+
+        let top = new THREE.Line(TopAnBottomGeometry, lineMaterial);
+        let bottom = top.clone(true);
+        bottom.position.y -= lineHeight;
+
+        LeftAndRightGeometry.setFromPoints([
+          new THREE.Vector3(-lineWidth, lineHeight / 2, 0),
+          new THREE.Vector3(-lineWidth, -lineHeight / 2, 0),
+        ]);
+        let left = new THREE.Line(LeftAndRightGeometry, lineMaterial);
+        let right = left.clone(true);
+        right.position.x += lineWidth;
+
+        rect.add(top, bottom, left, right);
+        scene.add(rect);
+
+        let menu = rect.clone(true);
+        menu.scale.setX(0.7);
+        menu.translateX(lineWidth * 0.7 + 10);
+        scene.add(menu);
+
+        let material = new THREE.SpriteMaterial({
+          map: new THREE.CanvasTexture(
+            this.generateSprite("score:" + score, "red")
+          ),
+          color: 0xffffff,
+        });
+        scoreLabel = new THREE.Sprite(material);
+        scoreLabel.scale.set(120, 120, 120);
+        scoreLabel.position.set(90, lineHeight / 3, 0);
+        scene.add(scoreLabel);
+
+        let start = scoreLabel.clone(true);
+        start.material = new THREE.SpriteMaterial({
+          map: new THREE.CanvasTexture(this.generateSprite("start", "white")),
+        });
+        start.name = "start";
+        start.translateY(-350);
+        scene.add(start);
+        let restart = start.clone(true);
+        restart.material = new THREE.SpriteMaterial({
+          map: new THREE.CanvasTexture(this.generateSprite("restart", "white")),
+        });
+        restart.translateX(80);
+        restart.name = "restart";
+        scene.add(restart);
+
+        let next = restart.clone(true);
+        next.material = new THREE.SpriteMaterial({
+          map: new THREE.CanvasTexture(this.generateSprite("next", "#00FFFF")),
+        });
+        next.translateY(320).translateX(-80);
+        scene.add(next);
+      }
 
       // add a torus knot
 
