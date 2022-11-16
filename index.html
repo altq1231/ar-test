@@ -351,11 +351,13 @@
 
         rect.add(top, bottom, left, right);
         scene.add(rect);
+        arWorldRoot.add(rect);
 
         let menu = rect.clone(true);
         menu.scale.setX(0.7);
         menu.translateX(lineWidth * 0.7 + 10);
         scene.add(menu);
+        arWorldRoot.add(menu);
 
         let material = new THREE.SpriteMaterial({
           map: new THREE.CanvasTexture(
@@ -367,6 +369,7 @@
         scoreLabel.scale.set(120, 120, 120);
         scoreLabel.position.set(90, lineHeight / 3, 0);
         scene.add(scoreLabel);
+        arWorldRoot.add(scoreLabel);
 
         let start = scoreLabel.clone(true);
         start.material = new THREE.SpriteMaterial({
@@ -375,6 +378,7 @@
         start.name = "start";
         start.translateY(-350);
         scene.add(start);
+        arWorldRoot.add(start);
         let restart = start.clone(true);
         restart.material = new THREE.SpriteMaterial({
           map: new THREE.CanvasTexture(this.generateSprite("restart", "white")),
@@ -382,6 +386,7 @@
         restart.translateX(80);
         restart.name = "restart";
         scene.add(restart);
+        arWorldRoot.add(restart);
 
         let next = restart.clone(true);
         next.material = new THREE.SpriteMaterial({
@@ -389,6 +394,7 @@
         });
         next.translateY(320).translateX(-80);
         scene.add(next);
+        arWorldRoot.add(next);
       }
 
       // add a torus knot
