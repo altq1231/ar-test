@@ -155,10 +155,10 @@
         onResize();
       });
       function onResize() {
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        renderer.render(scene, camera);
-        renderer.setSize(width, height);
+        // camera.aspect = width / height;
+        // camera.updateProjectionMatrix();
+        // renderer.render(scene, camera);
+        // renderer.setSize(width, height);
 
         arToolkitSource.onResizeElement();
         arToolkitSource.copyElementSizeTo(renderer.domElement);
