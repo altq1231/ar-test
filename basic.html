@@ -8,8 +8,11 @@
     <script type="text/javascript">
       var vConsole = new VConsole();
     </script>
-    <a-scene embedded arjs>
-      <a-marker preset="hiro">
+    <a-scene embedded arjs="debugUIEnabled: false;sourceType:webcam;">
+      <a-marker
+        type="pattern"
+        url="https://ued.united-imaging.com//doc_server//doc_server//arlib//pattern//123//pattern.patt"
+      >
         <a-entity
           position="0 0 0"
           rotation="0 0 0"
