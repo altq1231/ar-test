@@ -410,6 +410,29 @@
         arWorldRoot.add(next);
       }
 
+      //深度拷贝
+      function copyArr(m) {
+        return JSON.parse(JSON.stringify(m));
+      }
+
+      //给一点p绕着某一点pBase进行旋转操作
+      function rotate(p, ptBase) {
+        let degree = Math.PI / 2;
+
+        let x = Math.floor(
+          (p[0] - ptBase[0]) * Math.cos(degree) +
+            (p[1] - ptBase[1]) * math.sin(degree) +
+            ptBase[0]
+        );
+        let y = Math.floor(
+          -(p[0] - ptBase[0]) * Math.sin(degree) +
+            (p[1] - ptBase[1]) * math.cos(degree) +
+            ptBase[1]
+        );
+
+        return [x, y];
+      }
+
       // add a torus knot
 
       var geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
@@ -557,6 +580,153 @@
       function goback() {
         myobj.scene.position.y -= 1;
       }
+
+      class Cube {
+        constructor(type, position) {
+          // 方块类型
+          this.type = type;
+          // 记录方块当前的位置信息
+          this.position = position;
+        }
+      }
+
+      //生成下一个方块
+      function generateCube() {
+        // 判断是否输了
+        if (isLose()) {
+          score = 0;
+          // scoreLabel.material.map = new THREE.CanvasTexture(
+          //   generateSprite("score:" + score, "red")
+          // );
+          return restart();
+        }
+        let types = [
+          new Cube(1, [
+            [0, 3],
+            [0, 4],
+            [0, 5],
+            [0, 6],
+          ]),
+          new Cube(2, [
+            [0, 3],
+            [1, 3],
+            [1, 4],
+            [1, 5],
+          ]),
+          new Cube(3, [
+            [0, 5],
+            [1, 3],
+            [1, 4],
+            [1, 5],
+          ]),
+          new Cube(4, [
+            [0, 4],
+            [0, 5],
+            [1, 4],
+            [1, 5],
+          ]),
+          new Cube(5, [
+            [0, 5],
+            [0, 6],
+            [1, 4],
+            [1, 5],
+          ]),
+          new Cube(6, [
+            [0, 5],
+            [1, 4],
+            [1, 5],
+            [1, 6],
+          ]),
+          new Cube(7, [
+            [0, 3],
+            [0, 4],
+            [1, 4],
+            [1, 5],
+          ]),
+        ];
+
+        // 随机生成七种形状之一
+        if (nextCube == null) {
+          currentCube = types[Math.floor(Math.random() * 7)];
+        } else {
+          currentCube = nextCube;
+        }
+        nextCube = types[Math.floor(Math.random() * 7)];
+
+        let pos = currentCube.position;
+        let nextPos = nextCube.position;
+        for (let i = 0; i < pos.length; i++) {
+          matrix[pos[i][0]][pos[i][1]].cube.visible = true;
+        }
+
+        //隐藏之前的下一个方格
+        for (let i = 0; i < nextMatrix.length; i++) {
+          for (let j = 0; j < nextMatrix[i].length; j++) {
+            nextMatrix[i][j].visible = false;
+          }
+        }
+
+        //显示下一个cube
+        for (let i = 0; i < nextPos.length; i++) {
+          nextMatrix[nextPos[i][0]][nextPos[i][1] - 3].visible = true;
+        }
+      }
+
+      function initCubes() {
+        matrix = [];
+        let martixObject = new THREE.Object3D();
+        let cube = new THREE.BoxGeometry(cubeWidth, cubeWidth, 20);
+        let map = new THREE.TextureLoader().load(getImage());
+        map.wrapS = map.mapT = THREE.RepeatWrapping;
+        let material = new THREE.MeshLambertMaterial({
+          map,
+          side: THREE.DoubleSide,
+        });
+        let mesh = new THREE.Mesh(cube, material);
+        let m = 0,
+          n = 0;
+        // 初始化所有方块设置为隐藏
+        for (
+          let j = lineHeight / 2 - cubeWidth / 2 - seg;
+          j > -lineHeight / 2;
+          j -= cubeWidth + seg, m++, n = 0
+        ) {
+          matrix[m] = [];
+          for (
+            let i = -lineWidth + cubeWidth / 2 + seg;
+            i < 0;
+            i += cubeWidth + seg, n++
+          ) {
+            mesh = mesh.clone(true);
+            mesh.receiveShadow = true;
+            mesh.position.set(i, j, 0);
+            mesh.visible = false;
+            matrix[m][n] = {
+              cube: mesh,
+            };
+            martixObject.add(mesh);
+          }
+        }
+        scene.add(martixObject);
+
+        let nextCubes = new THREE.Object3D();
+        // NEXT
+        for (let i = 0; i < 4; i++) {
+          nextMatrix[i] = [];
+          for (let j = 0; j < 4; j++) {
+            mesh = mesh.clone(true);
+            mesh.position.set((cubeWidth + seg) * j, (cubeWidth + seg) * i, 0);
+            nextMatrix[i][j] = mesh;
+            nextCubes.add(mesh);
+          }
+        }
+        nextCubes.translateY(140).translateX(58);
+        nextCubes.rotateZ(-Math.PI);
+        nextCubes.rotateY(-Math.PI);
+        scene.add(nextCubes);
+        arWorldRoot.add(nextCubes);
+      }
+
       // 开始游戏
       function startGame() {
         console.log("startGame");
@@ -568,6 +738,55 @@
       // 旋转
       function rotateCell() {
         console.log("rotateCell");
+        let pos = currentCube.position;
+        let copy = copyArr(currentCube.position);
+        let type = currentCube.type;
+
+        // 某点(ab)绕点（mn）逆时针90度 得点（m+n-b,n-m+a)
+        let cx = Math.round(
+          (copy[0][0] + copy[1][0] + copy[2][0] + copy[3][0]) / 4
+        );
+        let cy = Math.round(
+          (copy[0][1] + copy[1][1] + copy[2][1] + copy[3][1]) / 4
+        );
+        //旋转的主要算法. 可以这样分解来理解。
+        //先假设围绕源点旋转。然后再加上中心点的坐标。
+        for (let i = 0; i < 4; i++) {
+          copy[i][0] = cx + cy - pos[i][1];
+          copy[i][1] = cy - cx + pos[i][0];
+        }
+
+        //对横向长条以及两个S型进行精度补偿
+        if (type == 1 || type == 5 || type == 7) {
+          if (copy[0][0] == copy[1][0]) {
+            for (let i = 0; i < 4; i++) {
+              copy[i][0] -= 1;
+            }
+          }
+        }
+
+        let canRotate = true;
+        let minus = minusMatrix(copy, pos);
+        for (let i = 0; i < minus.length; i++) {
+          if (
+            minus[i][0] < 0 ||
+            minus[i][1] < 0 ||
+            minus[i][0] > 19 ||
+            minus[i][1] > 9
+          ) {
+            canRotate = false;
+            break;
+          }
+          if (matrix[minus[i][0]][minus[i][1]].cube.visible == true) {
+            canRotate = false;
+            break;
+          }
+        }
+        if (canRotate) {
+          canUpdate = true;
+          updateMartixView(copy);
+          currentCube.position = copy;
+        }
       }
       // 向下移动
       function moveDown() {
