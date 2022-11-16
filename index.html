@@ -266,7 +266,7 @@
       var clock = new THREE.Clock();
       var mixer;
       var loader = new THREE.GLTFLoader();
-      var myobj = null;
+      var myObj = null;
       // 没有材质文件，系统自动设置Phong网格材质
       loader.load(
         "https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb",
@@ -281,7 +281,7 @@
 
           mixer = new THREE.AnimationMixer(obj.scene);
           mixer.clipAction(obj.animations[whoAction]).play();
-          myobj = obj;
+          myObj = obj;
         }
       );
 
@@ -533,9 +533,9 @@
       var ambient = new THREE.AmbientLight(0xffffff);
       scene.add(ambient);
 
-      var directctionalLight = new THREE.DirectionalLight(0xffffff);
-      directctionalLight.position.set(1, 1, 1).normalize();
-      scene.add(directctionalLight);
+      var directionalLight = new THREE.DirectionalLight(0xffffff);
+      directionalLight.position.set(1, 1, 1).normalize();
+      scene.add(directionalLight);
 
       //////////////////////////////////////////////////////////////////////////////////
       //		render the whole thing on the page
@@ -571,12 +571,12 @@
       });
 
       function changeAction(num) {
-        mixer.clipAction(myobj.animations[whoAction]).stop();
-        mixer.clipAction(myobj.animations[num]).play();
+        mixer.clipAction(myObj.animations[whoAction]).stop();
+        mixer.clipAction(myObj.animations[num]).play();
         whoAction = num;
       }
       function goback() {
-        myobj.scene.position.y -= 1;
+        myObj.scene.position.y -= 1;
       }
       initCubes();
       generateCube();
