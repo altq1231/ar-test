@@ -321,18 +321,18 @@
       let scoreLabel;
       let canUpdate = false;
 
-      let lineMaterial = new THREE.MeshBasicMaterial({
-        color: 0xff0000,
-      });
-      let TopAnBottomGeometry = new THREE.BufferGeometry();
-      TopAnBottomGeometry.setFromPoints([
-        new THREE.Vector3(1, 1, 0),
-        new THREE.Vector3(1, 2, 0),
-      ]);
-      let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
-      scene.add(topLine);
-      arWorldRoot.add(topLine);
-      // initRectLine();
+      // let lineMaterial = new THREE.MeshBasicMaterial({
+      //   color: 0xff0000,
+      // });
+      // let TopAnBottomGeometry = new THREE.BufferGeometry();
+      // TopAnBottomGeometry.setFromPoints([
+      //   new THREE.Vector3(1, 1, 0),
+      //   new THREE.Vector3(1, 2, 0),
+      // ]);
+      // let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
+      // scene.add(topLine);
+      // arWorldRoot.add(topLine);
+      initRectLine();
 
       //初始化轮廓线
       function initRectLine() {
@@ -350,19 +350,19 @@
           new THREE.Vector3(0, lineHeight / 2, 0),
         ]);
 
-        let top = new THREE.Line(TopAnBottomGeometry, lineMaterial);
-        let bottom = top.clone(true);
-        bottom.position.y -= lineHeight;
+        let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
+        let bottomLine = topLine.clone(true);
+        bottomLine.position.y -= lineHeight;
 
         LeftAndRightGeometry.setFromPoints([
           new THREE.Vector3(-lineWidth, lineHeight / 2, 0),
           new THREE.Vector3(-lineWidth, -lineHeight / 2, 0),
         ]);
-        let left = new THREE.Line(LeftAndRightGeometry, lineMaterial);
-        let right = left.clone(true);
-        right.position.x += lineWidth;
+        let leftLine = new THREE.Line(LeftAndRightGeometry, lineMaterial);
+        let rightLine = leftLine.clone(true);
+        rightLine.position.x += lineWidth;
 
-        rect.add(top, bottom, left, right);
+        rect.add(topLine, bottomLine, leftLine, rightLine);
         scene.add(rect);
         arWorldRoot.add(rect);
 
@@ -372,13 +372,13 @@
         scene.add(menu);
         arWorldRoot.add(menu);
 
-        let material = new THREE.SpriteMaterial({
+        let labelMaterial = new THREE.SpriteMaterial({
           map: new THREE.CanvasTexture(
             this.generateSprite("score:" + score, "red")
           ),
           color: 0xffffff,
         });
-        scoreLabel = new THREE.Sprite(material);
+        scoreLabel = new THREE.Sprite(labelMaterial);
         scoreLabel.scale.set(120, 120, 120);
         scoreLabel.position.set(90, lineHeight / 3, 0);
         scene.add(scoreLabel);
