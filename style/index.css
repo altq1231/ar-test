@@ -1,0 +1,75 @@
+.operation-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  bottom: 40px;
+  z-index: 2;
+  padding-top: 20px;
+  user-select: none;
+  -webkit-user-select: none;
+  /*禁用手机浏览器的用户选择功能 */
+  -moz-user-select: none;
+}
+.operation-container .btn-container {
+  align-items: center;
+}
+.operation-container .btn-container .common-btn {
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background-color: rgba(10, 122, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+.operation-container .btn-container .common-btn:active {
+  background-color: rgba(10, 122, 255, 0.8);
+}
+.operation-container .btn-container span {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.8);
+}
+.operation-container .start-container {
+  justify-content: center;
+}
+.operation-container .start-container .btn-container + .btn-container {
+  margin-left: 50px;
+}
+.operation-container .drop-container {
+  align-items: center;
+  justify-content: center;
+}
+.operation-container .drop-container .btn-container .common-btn {
+  flex: 0 0 90px;
+  width: 90px;
+  height: 90px;
+}
+.operation-container .right-container {
+  flex: 0 0 200px;
+  width: 200px;
+  padding-left: 20px;
+}
+.operation-container .right-container .direction-item {
+  align-items: center;
+  justify-content: center;
+}
+.operation-container .right-container .direction-item .btn-container:nth-child(n + 2) {
+  margin-left: 70px;
+}
+.operation-container .right-container .direction-item .btn-container {
+  position: relative;
+}
+.operation-container .right-container .direction-item .btn-container span {
+  position: absolute;
+  left: 50%;
+  bottom: -20px;
+  transform: translateX(-50%);
+}
+.operation-container .right-container .btn-container .common-btn {
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+}

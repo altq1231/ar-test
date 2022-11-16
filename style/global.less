@@ -1,0 +1,310 @@
+html,
+body {
+  font-family: Roboto Slab, sans-serif, Arial, Helvetica;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-size: 16px;
+}
+
+* {
+  user-select: none;
+}
+
+.nothing-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: linear-gradient(to top, #fafafa 0%, #f1f1f1 100%);
+  width: 100%;
+  height: 100vh;
+
+  .right-info {
+    flex: 0 0 17rem;
+    width: 17rem;
+    overflow: hidden;
+    margin-left: 2rem;
+
+    h1 {
+      font-size: 3rem;
+      color: #333333;
+      line-height: 3.5rem;
+      font-weight: bold;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: rgba(#333333, 0.6);
+      line-height: 1.5rem;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .bottom-back {
+    flex: 0 0 1.6rem;
+    height: 1.6rem;
+  }
+}
+
+.no-data-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+/* 可以设置不同的进入和离开动画   */
+/* 设置持续时间和动画函数        */
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+
+.text-fade-enter-active,
+.text-fade-leave-active {
+  transition: all 0.3s linear;
+}
+
+.text-fade-enter-from,
+.text-fade-leave-to {
+  opacity: 0;
+}
+
+.text-fade-enter-to,
+.text-fade-leave-from {
+  opacity: 1;
+}
+/* CSS Document */
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  vertical-align: baseline;
+  background: transparent;
+  outline-style: none;
+  /*FF*/
+}
+
+* {
+  box-sizing: border-box;
+  -moz-user-select: none;
+}
+
+html,
+body {
+  line-height: 1.5;
+  // width: 100%;
+  // height: 100%;
+  // overflow: hidden;
+}
+
+a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  background: transparent;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  text-decoration: none;
+  outline-style: none;
+  /*FF*/
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+input,
+select {
+  vertical-align: middle;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+i {
+  font-style: normal;
+}
+
+/*---------------------------scrollbar--------------------------*/
+// ::-webkit-scrollbar {
+//   width: 6px;
+//   height: 6px;
+//   background-color: transparent;
+//   background: rgba(0, 0, 0, 0.1);
+//   -webkit-backdrop-filter: saturate(180%) blur(20px);
+//   backdrop-filter: saturate(180%) blur(20px);
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   background: rgba(163, 169, 204, 0.8);
+//   border-radius: 3px;
+// }
+
+// ::-webkit-scrollbar-thumb:decrement {
+//   border-width: 3px;
+//   border-color: transparent;
+// }
+
+// ::-webkit-scrollbar-thumb:increment {
+//   border-width: 3px;
+//   border-color: transparent;
+// }
+
+// ::-webkit-scrollbar-thumb:hover {
+//   background: rgba(163, 169, 204, 1);
+// }
+
+// ::-webkit-scrollbar-corner {
+//   background-color: transparent;
+// }
+
+// ::-webkit-resizer {}
+
+/*---------------------------layout--------------------------*/
+.flex-col {
+  .flex-col;
+}
+
+.flex-row {
+  .flex-row;
+}
+
+.fill-flex {
+  .fill-flex;
+}
+
+.flex-row(@flex: flex, @Row: row, @wrap: nowrap) {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: @flex;
+  -webkit-box-orient: horizontal;
+  //horizontal    vertical
+  -moz-box-direction: @Row;
+  -ms-flex-direction: @Row;
+  -webkit-flex-direction: @Row;
+  flex-direction: @Row;
+  -webkit-box-wrap: @wrap;
+  -moz-box-wrap: @wrap;
+  -ms-flex-wrap: @wrap;
+  -webkit-flex-wrap: @wrap;
+  flex-wrap: @wrap;
+}
+
+.flex-col(@flex: flex, @Col: column, @wrap: nowrap) {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: @flex;
+  -webkit-box-orient: vertical;
+  -moz-box-direction: @Col;
+  -ms-flex-direction: @Col;
+  -webkit-flex-direction: @Col;
+  flex-direction: @Col;
+  -webkit-box-wrap: @wrap;
+  -moz-box-wrap: @wrap;
+  -ms-flex-wrap: @wrap;
+  -webkit-flex-wrap: @wrap;
+  flex-wrap: @wrap;
+}
+
+.fill-flex(@fill: 1) {
+  -webkit-box-flex: @fill;
+  -moz-box: @fill;
+  -webkit-flex: @fill;
+  -ms-flex: @fill;
+  flex: @fill;
+}
