@@ -793,7 +793,7 @@
         }
         if (canRotate) {
           canUpdate = true;
-          updateMartixView(copy);
+          updateMatrixView(copy);
           currentCube.position = copy;
         }
       }
@@ -802,19 +802,19 @@
         console.log(currentCube);
         let pos = currentCube.position;
         let x, y;
-        let newpos = [];
+        let newPos = [];
         let canMove = true;
         for (let i = 0; i < pos.length; i++) {
           (x = pos[i][0]), (y = pos[i][1]);
           if (x + 1 <= 19) {
-            newpos.push([x + 1, y]);
+            newPos.push([x + 1, y]);
           } else {
             break;
           }
         }
-        if (newpos.length == pos.length) {
+        if (newPos.length == pos.length) {
           //计算出变更前后两个矩阵的差集
-          let minus = minusMatrix(newpos, pos);
+          let minus = minusMatrix(newPos, pos);
           //判断变更的部分能否移动
           for (let i = 0; i < minus.length; i++) {
             if (matrix[minus[i][0]][minus[i][1]].cube.visible != false) {
@@ -824,8 +824,8 @@
           }
           if (canMove) {
             canUpdate = true;
-            updateMartixView(newpos);
-            currentCube.position = newpos;
+            updateMatrixView(newPos);
+            currentCube.position = newPos;
           } else {
             // 如果发生碰撞了,先消除
             clearCubes();
@@ -852,20 +852,20 @@
       function moveLeftAndRight(type) {
         let pos = currentCube.position;
         let x, y;
-        let newpos = [];
+        let newPos = [];
         let canMove = true;
         let step = type == 0 ? -1 : 1;
         for (let i = 0; i < pos.length; i++) {
           (x = pos[i][0]), (y = pos[i][1]);
           if (y + step >= 0 && y + step <= 9) {
-            newpos.push([x, y + step]);
+            newPos.push([x, y + step]);
           } else {
             break;
           }
         }
-        if (newpos.length == pos.length) {
+        if (newPos.length == pos.length) {
           //计算出变更前后两个矩阵的差集
-          let minus = minusMatrix(newpos, pos);
+          let minus = minusMatrix(newPos, pos);
           //判断变更的部分能否移动
           for (let i = 0; i < minus.length; i++) {
             if (matrix[minus[i][0]][minus[i][1]].cube.visible != false) {
@@ -875,14 +875,14 @@
           }
           if (canMove) {
             canUpdate = true;
-            updateMartixView(newpos);
-            currentCube.position = newpos;
+            updateMatrixView(newPos);
+            currentCube.position = newPos;
           }
         }
       }
 
       //更新视图矩阵
-      function updateMartixView(newpos) {
+      function updateMatrixView(newPos) {
         if (canUpdate) {
           let pos;
           //将之前的隐藏
@@ -891,8 +891,8 @@
             matrix[pos[0]][pos[1]].cube.visible = false;
           }
           //显示新的
-          for (let i = 0; i < newpos.length; i++) {
-            matrix[newpos[i][0]][newpos[i][1]].cube.visible = true;
+          for (let i = 0; i < newPos.length; i++) {
+            matrix[newPos[i][0]][newPos[i][1]].cube.visible = true;
           }
         }
       }
