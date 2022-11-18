@@ -267,27 +267,27 @@
 
       var arWorldRoot = smoothedRoot;
 
-      var clock = new THREE.Clock();
-      var mixer;
-      var loader = new THREE.GLTFLoader();
-      var myObj = null;
-      // 没有材质文件，系统自动设置Phong网格材质
-      loader.load(
-        "https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb",
-        function (obj) {
-          //设置模型位置
-          obj.scene.position.set(0, -1, 1);
-          obj.scene.scale.set(0.4, 0.4, 0.4);
-          // 旋转
-          obj.scene.rotation.x = (-90 * Math.PI) / 180;
+      // var clock = new THREE.Clock();
+      // var mixer;
+      // var loader = new THREE.GLTFLoader();
+      // var myObj = null;
+      // // 没有材质文件，系统自动设置Phong网格材质
+      // loader.load(
+      //   "https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb",
+      //   function (obj) {
+      //     //设置模型位置
+      //     obj.scene.position.set(0, -1, 1);
+      //     obj.scene.scale.set(0.4, 0.4, 0.4);
+      //     // 旋转
+      //     obj.scene.rotation.x = (-90 * Math.PI) / 180;
 
-          // arWorldRoot.add(obj.scene);
+      //     // arWorldRoot.add(obj.scene);
 
-          mixer = new THREE.AnimationMixer(obj.scene);
-          mixer.clipAction(obj.animations[whoAction]).play();
-          myObj = obj;
-        }
-      );
+      //     mixer = new THREE.AnimationMixer(obj.scene);
+      //     mixer.clipAction(obj.animations[whoAction]).play();
+      //     myObj = obj;
+      //   }
+      // );
 
       // 设置一个方格长宽为20
       let cubeWidth = 0.3;
@@ -435,55 +435,6 @@
         return [x, y];
       }
 
-      // add a torus knot
-
-      // var geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
-      // var material = new THREE.MeshNormalMaterial({
-      //   transparent: true,
-      //   opacity: 0.8,
-      //   side: THREE.DoubleSide,
-      // });
-      // var targets = [];
-      // for (let i = 1; i <= 9; i++) {
-      //   let mesh = new THREE.Mesh(geometry, material);
-      //   let x = 0,
-      //     z = 0;
-      //   if (i % 3 == 1) {
-      //     x = -0.6;
-      //   }
-      //   if (i % 3 == 2) {
-      //     x = 0;
-      //   }
-      //   if (i % 3 == 0) {
-      //     x = 0.6;
-      //   }
-      //   if (i <= 3) {
-      //     z = -0.6;
-      //   }
-      //   if (i > 3 && i <= 6) {
-      //     z = 0;
-      //   }
-      //   if (i > 6 && i <= 9) {
-      //     z = 0.6;
-      //   }
-      //   mesh.position.set(x, 0.1, z);
-      //   targets.push(mesh);
-      // }
-
-      // targets.forEach((item, i) => {
-      //   arWorldRoot.add(item);
-      //   onRenderFctsmy["selfAnim" + i] = function () {
-      //     item.rotation.z += 0.05;
-      //   };
-      // });
-
-      // var mid = 0.7;
-      // var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
-      // var gun = new THREE.Mesh(geometry2, material);
-      // gun.position.set(0, 0.1 + mid, 1.2);
-      // gun.rotation.x = (10 * Math.PI) / 180;
-      // arWorldRoot.add(gun);
-
       // 碰撞检测
       function hitTest(obj1, obj2) {
         console.log(obj1.position);
@@ -574,14 +525,6 @@
         });
       });
 
-      function changeAction(num) {
-        mixer.clipAction(myObj.animations[whoAction]).stop();
-        mixer.clipAction(myObj.animations[num]).play();
-        whoAction = num;
-      }
-      function goback() {
-        myObj.scene.position.y -= 1;
-      }
       initCubes();
       generateCube();
 
