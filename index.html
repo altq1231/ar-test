@@ -500,9 +500,9 @@
       // render the scene
       onRenderFcts.push(function () {
         // 更新动画帧
-        if (mixer) {
-          mixer.update(clock.getDelta());
-        }
+        // if (mixer) {
+        //   mixer.update(clock.getDelta());
+        // }
         renderer.render(scene, camera);
         stats.update();
       });
