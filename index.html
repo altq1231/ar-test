@@ -123,10 +123,6 @@
 
       // Create a camera
       var camera = new THREE.Camera();
-      camera.position.x = 0;
-      camera.position.y = 1;
-      camera.position.z = 0;
-      camera.lookAt(0, 0, 0);
       scene.add(camera);
 
       markerRoot = new THREE.Group();
@@ -270,7 +266,7 @@
       var clock = new THREE.Clock();
       var mixer;
       var loader = new THREE.GLTFLoader();
-      var myObj = null;
+      var myobj = null;
       // 没有材质文件，系统自动设置Phong网格材质
       loader.load(
         "https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb",
@@ -285,7 +281,7 @@
 
           mixer = new THREE.AnimationMixer(obj.scene);
           mixer.clipAction(obj.animations[whoAction]).play();
-          myObj = obj;
+          myobj = obj;
         }
       );
 
@@ -330,8 +326,8 @@
       });
       let TopAnBottomGeometry = new THREE.BufferGeometry();
       TopAnBottomGeometry.setFromPoints([
-        new THREE.Vector3(0, 0, 1),
-        new THREE.Vector3(0, 0, 2),
+        new THREE.Vector3(1, 0, 1),
+        new THREE.Vector3(1, 0, 2),
       ]);
       let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
       // scene.add(topLine);
@@ -377,7 +373,9 @@
         arWorldRoot.add(menu);
 
         let labelMaterial = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(generateSprite("score:" + score, "red")),
+          map: new THREE.CanvasTexture(
+            this.generateSprite("score:" + score, "red")
+          ),
           color: 0xffffff,
         });
         scoreLabel = new THREE.Sprite(labelMaterial);
@@ -388,7 +386,7 @@
 
         let start = scoreLabel.clone(true);
         start.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(generateSprite("start", "white")),
+          map: new THREE.CanvasTexture(this.generateSprite("start", "white")),
         });
         start.name = "start";
         start.translateY(-350);
@@ -396,7 +394,7 @@
         arWorldRoot.add(start);
         let restart = start.clone(true);
         restart.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(generateSprite("restart", "white")),
+          map: new THREE.CanvasTexture(this.generateSprite("restart", "white")),
         });
         restart.translateX(80);
         restart.name = "restart";
@@ -405,7 +403,7 @@
 
         let next = restart.clone(true);
         next.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(generateSprite("next", "#00FFFF")),
+          map: new THREE.CanvasTexture(this.generateSprite("next", "#00FFFF")),
         });
         next.translateY(320).translateX(-80);
         scene.add(next);
@@ -537,9 +535,9 @@
       var ambient = new THREE.AmbientLight(0xffffff);
       scene.add(ambient);
 
-      var directionalLight = new THREE.DirectionalLight(0xffffff);
-      directionalLight.position.set(1, 1, 1).normalize();
-      scene.add(directionalLight);
+      var directctionalLight = new THREE.DirectionalLight(0xffffff);
+      directctionalLight.position.set(1, 1, 1).normalize();
+      scene.add(directctionalLight);
 
       //////////////////////////////////////////////////////////////////////////////////
       //		render the whole thing on the page
@@ -575,12 +573,12 @@
       });
 
       function changeAction(num) {
-        mixer.clipAction(myObj.animations[whoAction]).stop();
-        mixer.clipAction(myObj.animations[num]).play();
+        mixer.clipAction(myobj.animations[whoAction]).stop();
+        mixer.clipAction(myobj.animations[num]).play();
         whoAction = num;
       }
       function goback() {
-        myObj.scene.position.y -= 1;
+        myobj.scene.position.y -= 1;
       }
       initCubes();
       generateCube();
@@ -669,7 +667,7 @@
 
       function initCubes() {
         matrix = [];
-        let matrixObject = new THREE.Object3D();
+        let martixObject = new THREE.Object3D();
         let cube = new THREE.BoxGeometry(cubeWidth, cubeWidth, cubeWidth);
         let map = new THREE.TextureLoader().load(getImage());
         map.wrapS = map.mapT = THREE.RepeatWrapping;
@@ -694,16 +692,16 @@
           ) {
             mesh = mesh.clone(true);
             mesh.receiveShadow = true;
-            mesh.position.set(i, 0, j);
+            mesh.position.set(i, j, 0);
             mesh.visible = false;
             matrix[m][n] = {
               cube: mesh,
             };
-            matrixObject.add(mesh);
+            martixObject.add(mesh);
           }
         }
-        scene.add(matrixObject);
-        arWorldRoot.add(matrixObject);
+        scene.add(martixObject);
+        arWorldRoot.add(martixObject);
 
         let nextCubes = new THREE.Object3D();
         // NEXT
@@ -797,7 +795,7 @@
         }
         if (canRotate) {
           canUpdate = true;
-          updateMatrixView(copy);
+          updateMartixView(copy);
           currentCube.position = copy;
         }
       }
@@ -806,19 +804,19 @@
         console.log(currentCube);
         let pos = currentCube.position;
         let x, y;
-        let newPos = [];
+        let newpos = [];
         let canMove = true;
         for (let i = 0; i < pos.length; i++) {
           (x = pos[i][0]), (y = pos[i][1]);
           if (x + 1 <= 19) {
-            newPos.push([x + 1, y]);
+            newpos.push([x + 1, y]);
           } else {
             break;
           }
         }
-        if (newPos.length == pos.length) {
+        if (newpos.length == pos.length) {
           //计算出变更前后两个矩阵的差集
-          let minus = minusMatrix(newPos, pos);
+          let minus = minusMatrix(newpos, pos);
           //判断变更的部分能否移动
           for (let i = 0; i < minus.length; i++) {
             if (matrix[minus[i][0]][minus[i][1]].cube.visible != false) {
@@ -828,8 +826,8 @@
           }
           if (canMove) {
             canUpdate = true;
-            updateMatrixView(newPos);
-            currentCube.position = newPos;
+            updateMartixView(newpos);
+            currentCube.position = newpos;
           } else {
             // 如果发生碰撞了,先消除
             clearCubes();
@@ -856,20 +854,20 @@
       function moveLeftAndRight(type) {
         let pos = currentCube.position;
         let x, y;
-        let newPos = [];
+        let newpos = [];
         let canMove = true;
         let step = type == 0 ? -1 : 1;
         for (let i = 0; i < pos.length; i++) {
           (x = pos[i][0]), (y = pos[i][1]);
           if (y + step >= 0 && y + step <= 9) {
-            newPos.push([x, y + step]);
+            newpos.push([x, y + step]);
           } else {
             break;
           }
         }
-        if (newPos.length == pos.length) {
+        if (newpos.length == pos.length) {
           //计算出变更前后两个矩阵的差集
-          let minus = minusMatrix(newPos, pos);
+          let minus = minusMatrix(newpos, pos);
           //判断变更的部分能否移动
           for (let i = 0; i < minus.length; i++) {
             if (matrix[minus[i][0]][minus[i][1]].cube.visible != false) {
@@ -879,14 +877,14 @@
           }
           if (canMove) {
             canUpdate = true;
-            updateMatrixView(newPos);
-            currentCube.position = newPos;
+            updateMartixView(newpos);
+            currentCube.position = newpos;
           }
         }
       }
 
       //更新视图矩阵
-      function updateMatrixView(newPos) {
+      function updateMartixView(newpos) {
         if (canUpdate) {
           let pos;
           //将之前的隐藏
@@ -895,8 +893,8 @@
             matrix[pos[0]][pos[1]].cube.visible = false;
           }
           //显示新的
-          for (let i = 0; i < newPos.length; i++) {
-            matrix[newPos[i][0]][newPos[i][1]].cube.visible = true;
+          for (let i = 0; i < newpos.length; i++) {
+            matrix[newpos[i][0]][newpos[i][1]].cube.visible = true;
           }
         }
       }
@@ -943,7 +941,7 @@
           //加分
           score += lineNumber.length * 10;
           scoreLabel.material.map = new THREE.CanvasTexture(
-            generateSprite("score:" + score, "red")
+            generateSprite("score:" + this.score, "red")
           );
 
           //消除完整
