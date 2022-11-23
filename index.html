@@ -940,9 +940,9 @@
         }
         if (lineNumber.length > 0) {
           //加分
-          score += lineNumber.length * 10;
+          score += lineNumber.length * lineWidthSeg;
           scoreLabel.material.map = new THREE.CanvasTexture(
-            generateSprite("score:" + this.score, "red")
+            generateSprite("score:" + score, "red")
           );
 
           //消除完整
