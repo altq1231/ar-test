@@ -94,7 +94,7 @@
 
       let width = window.innerWidth,
         height = window.innerHeight;
-      console.log(width, height);
+      console.log("window.innerWidth", width, height);
       // init renderer
       var renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -373,9 +373,7 @@
         arWorldRoot.add(menu);
 
         let labelMaterial = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(
-            this.generateSprite("score:" + score, "red")
-          ),
+          map: new THREE.CanvasTexture(generateSprite("score:" + score, "red")),
           color: 0xffffff,
         });
         scoreLabel = new THREE.Sprite(labelMaterial);
@@ -386,7 +384,7 @@
 
         let start = scoreLabel.clone(true);
         start.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(this.generateSprite("start", "white")),
+          map: new THREE.CanvasTexture(generateSprite("start", "white")),
         });
         start.name = "start";
         start.translateY(-350);
@@ -394,7 +392,7 @@
         arWorldRoot.add(start);
         let restart = start.clone(true);
         restart.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(this.generateSprite("restart", "white")),
+          map: new THREE.CanvasTexture(generateSprite("restart", "white")),
         });
         restart.translateX(80);
         restart.name = "restart";
@@ -403,7 +401,7 @@
 
         let next = restart.clone(true);
         next.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(this.generateSprite("next", "#00FFFF")),
+          map: new THREE.CanvasTexture(generateSprite("next", "#00FFFF")),
         });
         next.translateY(320).translateX(-80);
         scene.add(next);
@@ -705,7 +703,7 @@
         arWorldRoot.add(matrixObject);
 
         // let nextCubes = new THREE.Object3D();
-        // // NEXT
+        // // NEXTgenerateSpriteco
         // for (let i = 0; i < 4; i++) {
         //   nextMatrix[i] = [];
         //   for (let j = 0; j < 4; j++) {
@@ -802,7 +800,7 @@
       }
       // 向下移动
       function moveDown() {
-        console.log(currentCube);
+        console.log("moveDown", currentCube);
         let pos = currentCube.position;
         let x, y;
         let newPos = [];
@@ -941,9 +939,9 @@
         if (lineNumber.length > 0) {
           //加分
           score += lineNumber.length * lineWidthSeg;
-          scoreLabel.material.map = new THREE.CanvasTexture(
-            generateSprite("score:" + score, "red")
-          );
+          // scoreLabel.material.map = new THREE.CanvasTexture(
+          //   generateSprite("score:" + score, "red")
+          // );
 
           //消除完整
           for (let i = lineNumber.length - 1; i >= 0; i--) {
