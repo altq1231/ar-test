@@ -321,17 +321,17 @@
       let scoreLabel;
       let canUpdate = false;
 
-      // let lineMaterial = new THREE.MeshBasicMaterial({
-      //   color: 0xff0000,
-      // });
-      // let TopAnBottomGeometry = new THREE.BufferGeometry();
-      // TopAnBottomGeometry.setFromPoints([
-      //   new THREE.Vector3(1, 0, 1),
-      //   new THREE.Vector3(1, 0, 2),
-      // ]);
-      // let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
-      // // scene.add(topLine);
-      // arWorldRoot.add(topLine);
+      let lineMaterial = new THREE.MeshBasicMaterial({
+        color: 0xff0000,
+      });
+      let TopAnBottomGeometry = new THREE.BufferGeometry();
+      TopAnBottomGeometry.setFromPoints([
+        new THREE.Vector3(1, 0, 1),
+        new THREE.Vector3(1, 0, 2),
+      ]);
+      let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
+      // scene.add(topLine);
+      arWorldRoot.add(topLine);
       // initRectLine();
 
       //初始化轮廓线
