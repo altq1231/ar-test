@@ -667,7 +667,7 @@
 
       function initCubes() {
         matrix = [];
-        let martixObject = new THREE.Object3D();
+        let matrixObject = new THREE.Object3D();
         let cube = new THREE.BoxGeometry(cubeWidth, cubeWidth, cubeWidth);
         let map = new THREE.TextureLoader().load(getImage());
         map.wrapS = map.mapT = THREE.RepeatWrapping;
@@ -690,6 +690,7 @@
             i < 0;
             i += cubeWidth + seg, n++
           ) {
+            console.log("lineWidth", lineWidth, "i", i, "j", j);
             mesh = mesh.clone(true);
             mesh.receiveShadow = true;
             mesh.position.set(i, 0, -j);
@@ -697,28 +698,28 @@
             matrix[m][n] = {
               cube: mesh,
             };
-            martixObject.add(mesh);
+            matrixObject.add(mesh);
           }
         }
-        scene.add(martixObject);
-        arWorldRoot.add(martixObject);
+        scene.add(matrixObject);
+        arWorldRoot.add(matrixObject);
 
-        let nextCubes = new THREE.Object3D();
-        // NEXT
-        for (let i = 0; i < 4; i++) {
-          nextMatrix[i] = [];
-          for (let j = 0; j < 4; j++) {
-            mesh = mesh.clone(true);
-            mesh.position.set((cubeWidth + seg) * j, (cubeWidth + seg) * i, 0);
-            nextMatrix[i][j] = mesh;
-            nextCubes.add(mesh);
-          }
-        }
-        nextCubes.translateY(140).translateX(58);
-        nextCubes.rotateZ(-Math.PI);
-        nextCubes.rotateY(-Math.PI);
-        scene.add(nextCubes);
-        arWorldRoot.add(nextCubes);
+        // let nextCubes = new THREE.Object3D();
+        // // NEXT
+        // for (let i = 0; i < 4; i++) {
+        //   nextMatrix[i] = [];
+        //   for (let j = 0; j < 4; j++) {
+        //     mesh = mesh.clone(true);
+        //     mesh.position.set((cubeWidth + seg) * j, (cubeWidth + seg) * i, 0);
+        //     nextMatrix[i][j] = mesh;
+        //     nextCubes.add(mesh);
+        //   }
+        // }
+        // nextCubes.translateY(140).translateX(58);
+        // nextCubes.rotateZ(-Math.PI);
+        // nextCubes.rotateY(-Math.PI);
+        // scene.add(nextCubes);
+        // arWorldRoot.add(nextCubes);
       }
 
       // 开始游戏
@@ -795,7 +796,7 @@
         }
         if (canRotate) {
           canUpdate = true;
-          updateMartixView(copy);
+          updateMatrixView(copy);
           currentCube.position = copy;
         }
       }
@@ -804,19 +805,19 @@
         console.log(currentCube);
         let pos = currentCube.position;
         let x, y;
-        let newpos = [];
+        let newPos = [];
         let canMove = true;
         for (let i = 0; i < pos.length; i++) {
           (x = pos[i][0]), (y = pos[i][1]);
-          if (x + 1 <= 19) {
-            newpos.push([x + 1, y]);
+          if (x + 1 <= lineHeightSeg - 1) {
+            newPos.push([x + 1, y]);
           } else {
             break;
           }
         }
-        if (newpos.length == pos.length) {
+        if (newPos.length == pos.length) {
           //计算出变更前后两个矩阵的差集
-          let minus = minusMatrix(newpos, pos);
+          let minus = minusMatrix(newPos, pos);
           //判断变更的部分能否移动
           for (let i = 0; i < minus.length; i++) {
             if (matrix[minus[i][0]][minus[i][1]].cube.visible != false) {
@@ -826,8 +827,8 @@
           }
           if (canMove) {
             canUpdate = true;
-            updateMartixView(newpos);
-            currentCube.position = newpos;
+            updateMatrixView(newPos);
+            currentCube.position = newPos;
           } else {
             // 如果发生碰撞了,先消除
             clearCubes();
@@ -854,20 +855,20 @@
       function moveLeftAndRight(type) {
         let pos = currentCube.position;
         let x, y;
-        let newpos = [];
+        let newPos = [];
         let canMove = true;
         let step = type == 0 ? -1 : 1;
         for (let i = 0; i < pos.length; i++) {
           (x = pos[i][0]), (y = pos[i][1]);
-          if (y + step >= 0 && y + step <= 9) {
-            newpos.push([x, y + step]);
+          if (y + step >= 0 && y + step <= lineWidthSeg - 1) {
+            newPos.push([x, y + step]);
           } else {
             break;
           }
         }
-        if (newpos.length == pos.length) {
+        if (newPos.length == pos.length) {
           //计算出变更前后两个矩阵的差集
-          let minus = minusMatrix(newpos, pos);
+          let minus = minusMatrix(newPos, pos);
           //判断变更的部分能否移动
           for (let i = 0; i < minus.length; i++) {
             if (matrix[minus[i][0]][minus[i][1]].cube.visible != false) {
@@ -877,14 +878,14 @@
           }
           if (canMove) {
             canUpdate = true;
-            updateMartixView(newpos);
-            currentCube.position = newpos;
+            updateMatrixView(newPos);
+            currentCube.position = newPos;
           }
         }
       }
 
       //更新视图矩阵
-      function updateMartixView(newpos) {
+      function updateMatrixView(newPos) {
         if (canUpdate) {
           let pos;
           //将之前的隐藏
@@ -893,8 +894,8 @@
             matrix[pos[0]][pos[1]].cube.visible = false;
           }
           //显示新的
-          for (let i = 0; i < newpos.length; i++) {
-            matrix[newpos[i][0]][newpos[i][1]].cube.visible = true;
+          for (let i = 0; i < newPos.length; i++) {
+            matrix[newPos[i][0]][newPos[i][1]].cube.visible = true;
           }
         }
       }
@@ -923,8 +924,8 @@
         canUpdate = false;
         let clear = false,
           lineNumber = [];
-        for (let i = 0; i <= 19; i++) {
-          for (let j = 0; j <= 9; j++) {
+        for (let i = 0; i <= lineHeightSeg - 1; i++) {
+          for (let j = 0; j <= lineWidthSeg - 1; j++) {
             // 判断某一行是否全部点亮
             if (matrix[i][j].cube.visible == true) {
               clear = true;
@@ -946,7 +947,7 @@
 
           //消除完整
           for (let i = lineNumber.length - 1; i >= 0; i--) {
-            for (let j = 0; j <= 9; j++) {
+            for (let j = 0; j <= lineWidthSeg - 1; j++) {
               matrix[lineNumber[i]][j].cube.visible = false;
             }
           }
@@ -954,7 +955,7 @@
           //将上面的移动下来
           for (let i = 0; i < lineNumber.length; i++) {
             for (let j = lineNumber[i]; j >= 1; j--) {
-              for (let k = 0; k <= 9; k++) {
+              for (let k = 0; k <= lineWidthSeg - 1; k++) {
                 if (matrix[j - 1][k].cube.visible == true) {
                   matrix[j - 1][k].cube.visible = false;
                   matrix[j][k].cube.visible = true;
