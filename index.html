@@ -450,11 +450,7 @@
           j -= cubeWidth + seg, m++, n = 0
         ) {
           matrix[m] = [];
-          for (
-            let i = -lineWidth / 2 + cubeWidth / 2 + seg;
-            i < 0;
-            i += cubeWidth + seg, n++
-          ) {
+          for (let i = -(lineWidth / 2); i < 0; i += cubeWidth + seg, n++) {
             // console.log("lineWidth", lineWidth, "i", i, "j", j);
             mesh = mesh.clone(true);
             mesh.receiveShadow = true;
