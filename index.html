@@ -287,17 +287,22 @@
       let scoreLabel;
       let canUpdate = false;
 
-      let lineMaterial = new THREE.MeshBasicMaterial({
-        color: 0xff0000,
+      const url =
+        "https://ued.united-imaging.com/doc_server/doc_server/resource/src/6ef26ac6d642cd641f93a8c3d26c3bab.png";
+      // 加载贴图
+      const textureLoader = new THREE.TextureLoader();
+      meshTexture = textureLoader.load(url);
+      // 注意：箱子不能使用MeshBasicMaterial，否则会出现光照无反应
+      const mat = new THREE.MeshPhongMaterial({
+        color: 0x757575,
+        map: meshTexture,
+        normalMap: meshTexture,
+        bumpMap: meshTexture,
       });
-      let TopAnBottomGeometry = new THREE.BufferGeometry();
-      TopAnBottomGeometry.setFromPoints([
-        new THREE.Vector3(1, 0, 1),
-        new THREE.Vector3(1, 0, 2),
-      ]);
-      let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
-      // scene.add(topLine);
-      arWorldRoot.add(topLine);
+      const testGeometry = new THREE.BoxGeometry(0.3, 0.001, 0.3);
+      const testMesh = new THREE.Mesh(testGeometry, mat);
+
+      arWorldRoot.add(testMesh);
 
       //深度拷贝
       function copyArr(m) {
@@ -352,7 +357,7 @@
           // scoreLabel.material.map = new THREE.CanvasTexture(
           //   generateSprite("score:" + score, "red")
           // );
-          return restart();
+          return restartGame();
         }
         let types = [
           new Cube(1, [
