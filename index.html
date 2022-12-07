@@ -288,20 +288,20 @@
       let canUpdate = false;
 
       const imgUrl = "./image/cell.png";
-      // 加载贴图
-      const textureLoader = new THREE.TextureLoader();
-      meshTexture = textureLoader.load(imgUrl);
-      // 注意：箱子不能使用MeshBasicMaterial，否则会出现光照无反应
-      const mat = new THREE.MeshPhongMaterial({
-        color: 0x757575,
-        map: meshTexture,
-        normalMap: meshTexture,
-        bumpMap: meshTexture,
-      });
-      const testGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.3);
-      const testMesh = new THREE.Mesh(testGeometry, mat);
+      // // 加载贴图
+      // const textureLoader = new THREE.TextureLoader();
+      // meshTexture = textureLoader.load(imgUrl);
+      // // 注意：箱子不能使用MeshBasicMaterial，否则会出现光照无反应
+      // const mat = new THREE.MeshPhongMaterial({
+      //   color: 0x757575,
+      //   map: meshTexture,
+      //   normalMap: meshTexture,
+      //   bumpMap: meshTexture,
+      // });
+      // const testGeometry = new THREE.BoxGeometry(0.3, 0.1, 0.3);
+      // const testMesh = new THREE.Mesh(testGeometry, mat);
 
-      arWorldRoot.add(testMesh);
+      // arWorldRoot.add(testMesh);
 
       //深度拷贝
       function copyArr(m) {
