@@ -96,8 +96,8 @@
       // renderer.setPixelRatio( 1/2 );
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.domElement.style.position = "absolute";
-      renderer.domElement.style.top = "0px";
-      renderer.domElement.style.left = "0px";
+      renderer.domElement.style.top = "0";
+      renderer.domElement.style.left = "0";
       document.body.appendChild(renderer.domElement);
 
       // array of functions for the rendering loop
@@ -146,12 +146,8 @@
       window.addEventListener("resize", function () {
         onResize();
       });
-      function onResize() {
-        // camera.aspect = width / height;
-        // camera.updateProjectionMatrix();
-        // renderer.render(scene, camera);
-        // renderer.setSize(width, height);
 
+      function onResize() {
         arToolkitSource.onResizeElement();
         arToolkitSource.copyElementSizeTo(renderer.domElement);
         if (window.arToolkitContext.arController !== null) {
@@ -170,7 +166,7 @@
 
         arToolkitContext = new THREEx.ArToolkitContext({
           cameraParametersUrl:
-            "https://jeromeetienne.github.io/AR.js/data/data/camera_para.dat",
+            "https://ued.united-imaging.com/doc_server/doc_server/resource/src/343c761a5174cf7f427e30ba75ceb63f.dat",
           detectionMode: "mono",
           maxDetectionRate: 30,
           canvasWidth: 80 * 3,
