@@ -287,10 +287,10 @@
       let scoreLabel;
       let canUpdate = false;
 
-      const url = "./image/cell.png";
+      const imgUrl = "./image/cell.png";
       // 加载贴图
       const textureLoader = new THREE.TextureLoader();
-      meshTexture = textureLoader.load(url);
+      meshTexture = textureLoader.load(imgUrl);
       // 注意：箱子不能使用MeshBasicMaterial，否则会出现光照无反应
       const mat = new THREE.MeshPhongMaterial({
         color: 0x757575,
@@ -434,7 +434,7 @@
         matrix = [];
         let matrixObject = new THREE.Object3D();
         let cube = new THREE.BoxGeometry(cubeWidth, cubeWidth, cubeWidth);
-        let map = new THREE.TextureLoader().load(getImage());
+        let map = new THREE.TextureLoader().load(imgUrl);
         map.wrapS = map.mapT = THREE.RepeatWrapping;
         let material = new THREE.MeshLambertMaterial({
           map,
