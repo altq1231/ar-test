@@ -231,20 +231,20 @@
       //          Create a ArMarkerControls
       ////////////////////////////////////////////////////////////////////////////////
 
-      // var markerRoot = new THREE.Group();
-      // scene.add(markerRoot);
+      var markerRoot = new THREE.Group();
+      scene.add(markerRoot);
 
       // // build a smoothedControls
-      // var smoothedRoot = new THREE.Group();
-      // scene.add(smoothedRoot);
-      // var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
-      //   lerpPosition: 0.4,
-      //   lerpQuaternion: 0.3,
-      //   lerpScale: 1,
-      // });
-      // onRenderFcts.push(function (delta) {
-      //   smoothedControls.update(markerRoot);
-      // });
+      var smoothedRoot = new THREE.Group();
+      scene.add(smoothedRoot);
+      var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
+        lerpPosition: 0.4,
+        lerpQuaternion: 0.3,
+        lerpScale: 1,
+      });
+      onRenderFcts.push(function (delta) {
+        smoothedControls.update(markerRoot);
+      });
       // //////////////////////////////////////////////////////////////////////////////////
       // //		add an object in the scene
       // //////////////////////////////////////////////////////////////////////////////////
