@@ -44,12 +44,6 @@
             <span>Reset</span>
           </div>
         </div>
-        <!-- <div class="drop-container fill-flex flex-row">
-          <div class="btn-container flex-col">
-            <button class="common-btn start-btn"></button>
-            <span>Drop</span>
-          </div>
-        </div> -->
       </div>
       <div class="right-container">
         <div class="direction-item flex-row">
@@ -86,8 +80,6 @@
       </div>
     </div>
     <script>
-      var whoAction = 0;
-
       //////////////////////////////////////////////////////////////////////////////////
       //		Init
       //////////////////////////////////////////////////////////////////////////////////
@@ -243,47 +235,47 @@
       //          Create a ArMarkerControls
       ////////////////////////////////////////////////////////////////////////////////
 
-      var markerRoot = new THREE.Group();
-      scene.add(markerRoot);
+      // var markerRoot = new THREE.Group();
+      // scene.add(markerRoot);
 
-      // build a smoothedControls
-      var smoothedRoot = new THREE.Group();
-      scene.add(smoothedRoot);
-      var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
-        lerpPosition: 0.4,
-        lerpQuaternion: 0.3,
-        lerpScale: 1,
-      });
-      onRenderFcts.push(function (delta) {
-        smoothedControls.update(markerRoot);
-      });
-      //////////////////////////////////////////////////////////////////////////////////
-      //		add an object in the scene
-      //////////////////////////////////////////////////////////////////////////////////
+      // // build a smoothedControls
+      // var smoothedRoot = new THREE.Group();
+      // scene.add(smoothedRoot);
+      // var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
+      //   lerpPosition: 0.4,
+      //   lerpQuaternion: 0.3,
+      //   lerpScale: 1,
+      // });
+      // onRenderFcts.push(function (delta) {
+      //   smoothedControls.update(markerRoot);
+      // });
+      // //////////////////////////////////////////////////////////////////////////////////
+      // //		add an object in the scene
+      // //////////////////////////////////////////////////////////////////////////////////
 
-      var arWorldRoot = smoothedRoot;
+      // var arWorldRoot = smoothedRoot;
 
-      var clock = new THREE.Clock();
-      var mixer;
-      var loader = new THREE.GLTFLoader();
-      var myobj = null;
-      // 没有材质文件，系统自动设置Phong网格材质
-      loader.load(
-        "https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb",
-        function (obj) {
-          //设置模型位置
-          obj.scene.position.set(0, -1, 1);
-          obj.scene.scale.set(0.4, 0.4, 0.4);
-          // 旋转
-          obj.scene.rotation.x = (-90 * Math.PI) / 180;
+      // var clock = new THREE.Clock();
+      // var mixer;
+      // var loader = new THREE.GLTFLoader();
+      // var myobj = null;
+      // // 没有材质文件，系统自动设置Phong网格材质
+      // loader.load(
+      //   "https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb",
+      //   function (obj) {
+      //     //设置模型位置
+      //     obj.scene.position.set(0, -1, 1);
+      //     obj.scene.scale.set(0.4, 0.4, 0.4);
+      //     // 旋转
+      //     obj.scene.rotation.x = (-90 * Math.PI) / 180;
 
-          // arWorldRoot.add(obj.scene);
+      //     // arWorldRoot.add(obj.scene);
 
-          mixer = new THREE.AnimationMixer(obj.scene);
-          mixer.clipAction(obj.animations[whoAction]).play();
-          myobj = obj;
-        }
-      );
+      //     mixer = new THREE.AnimationMixer(obj.scene);
+      //     mixer.clipAction(obj.animations[whoAction]).play();
+      //     myobj = obj;
+      //   }
+      // );
 
       // 设置一个方格长宽为20
       let cubeWidth = 0.3;
@@ -413,24 +405,6 @@
         return JSON.parse(JSON.stringify(m));
       }
 
-      //给一点p绕着某一点pBase进行旋转操作
-      function rotate(p, ptBase) {
-        let degree = Math.PI / 2;
-
-        let x = Math.floor(
-          (p[0] - ptBase[0]) * Math.cos(degree) +
-            (p[1] - ptBase[1]) * math.sin(degree) +
-            ptBase[0]
-        );
-        let y = Math.floor(
-          -(p[0] - ptBase[0]) * Math.sin(degree) +
-            (p[1] - ptBase[1]) * math.cos(degree) +
-            ptBase[1]
-        );
-
-        return [x, y];
-      }
-
       // add a torus knot
 
       // var geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
@@ -480,55 +454,6 @@
       // gun.rotation.x = (10 * Math.PI) / 180;
       // arWorldRoot.add(gun);
 
-      // 碰撞检测
-      function hitTest(obj1, obj2) {
-        console.log(obj1.position);
-        console.log(obj2.position);
-        if (
-          obj1.position.x < obj2.position.x + 0.15 &&
-          obj1.position.x > obj2.position.x - 0.15
-        ) {
-          if (
-            obj1.position.z < obj2.position.z + 0.15 &&
-            obj1.position.z > obj2.position.z - 0.15
-          ) {
-            return true;
-          }
-        }
-        return false;
-      }
-      // 射击
-      function shot() {
-        // tan71.565°等于3。上下最大角度为75,左右最多45
-        let geometry3 = new THREE.SphereGeometry(0.05);
-        let ball = new THREE.Mesh(geometry3, material);
-        ball.position.set(0, mid, 1.2);
-        arWorldRoot.add(ball);
-        let zDis = mid * Math.tan(gun.rotation.x);
-        let xDis = mid * Math.tan(gun.rotation.z);
-        let num = Math.random() * 10000;
-        onRenderFctsmy["ballMove" + num] = function () {
-          ball.position.y -= mid / 10; // 前进
-          ball.position.z -= zDis / 10; // 上升
-          ball.position.x += xDis / 10; // 左右
-          if (ball.position.y <= 0.1) {
-            delete onRenderFctsmy["ballMove" + num];
-            delete onRenderFctsmy.isShot;
-            arWorldRoot.remove(ball);
-          }
-        };
-        onRenderFctsmy.isShot = function () {
-          if (ball.position.y <= 0.15) {
-            targets.forEach((item, i) => {
-              if (hitTest(ball, item)) {
-                delete onRenderFctsmy["selfAnim" + i];
-                arWorldRoot.remove(item);
-              }
-            });
-          }
-        };
-      }
-
       // 光
       var ambient = new THREE.AmbientLight(0xffffff);
       scene.add(ambient);
@@ -540,44 +465,36 @@
       //////////////////////////////////////////////////////////////////////////////////
       //		render the whole thing on the page
       //////////////////////////////////////////////////////////////////////////////////
-      var stats = new Stats();
-      document.body.appendChild(stats.dom);
-      // render the scene
-      onRenderFcts.push(function () {
-        // 更新动画帧
-        if (mixer) {
-          mixer.update(clock.getDelta());
-        }
-        renderer.render(scene, camera);
-        stats.update();
-      });
+      // var stats = new Stats();
+      // document.body.appendChild(stats.dom);
+      // // render the scene
+      // onRenderFcts.push(function () {
+      //   // 更新动画帧
+      //   if (mixer) {
+      //     mixer.update(clock.getDelta());
+      //   }
+      //   renderer.render(scene, camera);
+      //   stats.update();
+      // });
 
       // run the rendering loop
-      var lastTimeMsec = null;
+      // var lastTimeMsec = null;
       requestAnimationFrame(function animate(nowMsec) {
         // keep looping
         requestAnimationFrame(animate);
-        // measure time
-        lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60;
-        var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
-        lastTimeMsec = nowMsec;
-        // call each update function
-        onRenderFcts.forEach(function (onRenderFct) {
-          onRenderFct(deltaMsec / 1000, nowMsec / 1000);
-        });
-        Object.values(onRenderFctsmy).forEach(function (onRenderFct) {
-          onRenderFct(deltaMsec / 1000, nowMsec / 1000);
-        });
+        // // measure time
+        // lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60;
+        // var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+        // lastTimeMsec = nowMsec;
+        // // call each update function
+        // onRenderFcts.forEach(function (onRenderFct) {
+        //   onRenderFct(deltaMsec / 1000, nowMsec / 1000);
+        // });
+        // Object.values(onRenderFctsmy).forEach(function (onRenderFct) {
+        //   onRenderFct(deltaMsec / 1000, nowMsec / 1000);
+        // });
       });
 
-      function changeAction(num) {
-        mixer.clipAction(myobj.animations[whoAction]).stop();
-        mixer.clipAction(myobj.animations[num]).play();
-        whoAction = num;
-      }
-      function goback() {
-        myobj.scene.position.y -= 1;
-      }
       initCubes();
       generateCube();
 
@@ -730,6 +647,7 @@
           haveStart = true;
         }
       }
+
       // 重新开始游戏
       function restartGame() {
         if (haveStart) {
@@ -744,6 +662,7 @@
           haveStart = false;
         }
       }
+
       // 旋转
       function rotateCell() {
         console.log("rotateCell");
@@ -798,6 +717,7 @@
           currentCube.position = copy;
         }
       }
+
       // 向下移动
       function moveDown() {
         console.log("moveDown", currentCube);
@@ -849,6 +769,7 @@
         }
         return num >= 3;
       }
+
       // 左右移动
       function moveLeftAndRight(type) {
         let pos = currentCube.position;
