@@ -251,28 +251,6 @@
 
       var arWorldRoot = smoothedRoot;
 
-      // var clock = new THREE.Clock();
-      // var mixer;
-      // var loader = new THREE.GLTFLoader();
-      // var myobj = null;
-      // // 没有材质文件，系统自动设置Phong网格材质
-      // loader.load(
-      //   "https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb",
-      //   function (obj) {
-      //     //设置模型位置
-      //     obj.scene.position.set(0, -1, 1);
-      //     obj.scene.scale.set(0.4, 0.4, 0.4);
-      //     // 旋转
-      //     obj.scene.rotation.x = (-90 * Math.PI) / 180;
-
-      //     // arWorldRoot.add(obj.scene);
-
-      //     mixer = new THREE.AnimationMixer(obj.scene);
-      //     mixer.clipAction(obj.animations[whoAction]).play();
-      //     myobj = obj;
-      //   }
-      // );
-
       // 设置一个方格长宽为20
       let cubeWidth = 0.3;
       // 横向10格，纵向20格, 间隙为4
@@ -320,135 +298,11 @@
       let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
       // scene.add(topLine);
       arWorldRoot.add(topLine);
-      // initRectLine();
-
-      //初始化轮廓线
-      function initRectLine() {
-        let rect = new THREE.Group();
-
-        let lineMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-        });
-
-        let TopAnBottomGeometry = new THREE.BufferGeometry();
-        let LeftAndRightGeometry = new THREE.BufferGeometry();
-
-        TopAnBottomGeometry.setFromPoints([
-          new THREE.Vector3(-lineWidth, lineHeight / 2, 0),
-          new THREE.Vector3(0, lineHeight / 2, 0),
-        ]);
-
-        let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
-        let bottomLine = topLine.clone(true);
-        bottomLine.position.y -= lineHeight;
-
-        LeftAndRightGeometry.setFromPoints([
-          new THREE.Vector3(-lineWidth, lineHeight / 2, 0),
-          new THREE.Vector3(-lineWidth, -lineHeight / 2, 0),
-        ]);
-        let leftLine = new THREE.Line(LeftAndRightGeometry, lineMaterial);
-        let rightLine = leftLine.clone(true);
-        rightLine.position.x += lineWidth;
-
-        rect.add(topLine, bottomLine, leftLine, rightLine);
-        scene.add(rect);
-        arWorldRoot.add(rect);
-
-        let menu = rect.clone(true);
-        menu.scale.setX(0.7);
-        menu.translateX(lineWidth * 0.7 + 10);
-        scene.add(menu);
-        arWorldRoot.add(menu);
-
-        let labelMaterial = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(generateSprite("score:" + score, "red")),
-          color: 0xffffff,
-        });
-        scoreLabel = new THREE.Sprite(labelMaterial);
-        scoreLabel.scale.set(120, 120, 120);
-        scoreLabel.position.set(90, lineHeight / 3, 0);
-        scene.add(scoreLabel);
-        arWorldRoot.add(scoreLabel);
-
-        let start = scoreLabel.clone(true);
-        start.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(generateSprite("start", "white")),
-        });
-        start.name = "start";
-        start.translateY(-350);
-        scene.add(start);
-        arWorldRoot.add(start);
-        let restart = start.clone(true);
-        restart.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(generateSprite("restart", "white")),
-        });
-        restart.translateX(80);
-        restart.name = "restart";
-        scene.add(restart);
-        arWorldRoot.add(restart);
-
-        let next = restart.clone(true);
-        next.material = new THREE.SpriteMaterial({
-          map: new THREE.CanvasTexture(generateSprite("next", "#00FFFF")),
-        });
-        next.translateY(320).translateX(-80);
-        scene.add(next);
-        arWorldRoot.add(next);
-      }
 
       //深度拷贝
       function copyArr(m) {
         return JSON.parse(JSON.stringify(m));
       }
-
-      // add a torus knot
-
-      // var geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
-      // var material = new THREE.MeshNormalMaterial({
-      //   transparent: true,
-      //   opacity: 0.8,
-      //   side: THREE.DoubleSide,
-      // });
-      // var targets = [];
-      // for (let i = 1; i <= 9; i++) {
-      //   let mesh = new THREE.Mesh(geometry, material);
-      //   let x = 0,
-      //     z = 0;
-      //   if (i % 3 == 1) {
-      //     x = -0.6;
-      //   }
-      //   if (i % 3 == 2) {
-      //     x = 0;
-      //   }
-      //   if (i % 3 == 0) {
-      //     x = 0.6;
-      //   }
-      //   if (i <= 3) {
-      //     z = -0.6;
-      //   }
-      //   if (i > 3 && i <= 6) {
-      //     z = 0;
-      //   }
-      //   if (i > 6 && i <= 9) {
-      //     z = 0.6;
-      //   }
-      //   mesh.position.set(x, 0.1, z);
-      //   targets.push(mesh);
-      // }
-
-      // targets.forEach((item, i) => {
-      //   arWorldRoot.add(item);
-      //   onRenderFctsmy["selfAnim" + i] = function () {
-      //     item.rotation.z += 0.05;
-      //   };
-      // });
-
-      // var mid = 0.7;
-      // var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
-      // var gun = new THREE.Mesh(geometry2, material);
-      // gun.position.set(0, 0.1 + mid, 1.2);
-      // gun.rotation.x = (10 * Math.PI) / 180;
-      // arWorldRoot.add(gun);
 
       // 光
       var ambient = new THREE.AmbientLight(0xffffff);
@@ -461,34 +315,30 @@
       //////////////////////////////////////////////////////////////////////////////////
       //		render the whole thing on the page
       //////////////////////////////////////////////////////////////////////////////////
-      // var stats = new Stats();
-      // document.body.appendChild(stats.dom);
-      // // render the scene
-      // onRenderFcts.push(function () {
-      //   // 更新动画帧
-      //   if (mixer) {
-      //     mixer.update(clock.getDelta());
-      //   }
-      //   renderer.render(scene, camera);
-      //   stats.update();
-      // });
+      var stats = new Stats();
+      document.body.appendChild(stats.dom);
+      // render the scene
+      onRenderFcts.push(function () {
+        renderer.render(scene, camera);
+        stats.update();
+      });
 
       // run the rendering loop
-      // var lastTimeMsec = null;
+      var lastTimeMsec = null;
       requestAnimationFrame(function animate(nowMsec) {
         // keep looping
         requestAnimationFrame(animate);
-        // // measure time
-        // lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60;
-        // var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
-        // lastTimeMsec = nowMsec;
-        // // call each update function
-        // onRenderFcts.forEach(function (onRenderFct) {
-        //   onRenderFct(deltaMsec / 1000, nowMsec / 1000);
-        // });
-        // Object.values(onRenderFctsmy).forEach(function (onRenderFct) {
-        //   onRenderFct(deltaMsec / 1000, nowMsec / 1000);
-        // });
+        // measure time
+        lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60;
+        var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+        lastTimeMsec = nowMsec;
+        // call each update function
+        onRenderFcts.forEach(function (onRenderFct) {
+          onRenderFct(deltaMsec / 1000, nowMsec / 1000);
+        });
+        Object.values(onRenderFctsmy).forEach(function (onRenderFct) {
+          onRenderFct(deltaMsec / 1000, nowMsec / 1000);
+        });
       });
 
       initCubes();
@@ -601,7 +451,7 @@
             i < 0;
             i += cubeWidth + seg, n++
           ) {
-            console.log("lineWidth", lineWidth, "i", i, "j", j);
+            // console.log("lineWidth", lineWidth, "i", i, "j", j);
             mesh = mesh.clone(true);
             mesh.receiveShadow = true;
             mesh.position.set(i, 0, -j);
@@ -614,23 +464,6 @@
         }
         scene.add(matrixObject);
         arWorldRoot.add(matrixObject);
-
-        // let nextCubes = new THREE.Object3D();
-        // // NEXTgenerateSpriteco
-        // for (let i = 0; i < 4; i++) {
-        //   nextMatrix[i] = [];
-        //   for (let j = 0; j < 4; j++) {
-        //     mesh = mesh.clone(true);
-        //     mesh.position.set((cubeWidth + seg) * j, (cubeWidth + seg) * i, 0);
-        //     nextMatrix[i][j] = mesh;
-        //     nextCubes.add(mesh);
-        //   }
-        // }
-        // nextCubes.translateY(140).translateX(58);
-        // nextCubes.rotateZ(-Math.PI);
-        // nextCubes.rotateY(-Math.PI);
-        // scene.add(nextCubes);
-        // arWorldRoot.add(nextCubes);
       }
 
       // 开始游戏
