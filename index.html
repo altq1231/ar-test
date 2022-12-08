@@ -340,6 +340,9 @@
         let lineMaterial = new THREE.MeshBasicMaterial({
           color: 0x000000,
         });
+        let lineMaterial1 = new THREE.MeshBasicMaterial({
+          color: 0xff0000,
+        });
         // let TopAnBottomGeometry = new THREE.BufferGeometry();
         // TopAnBottomGeometry.setFromPoints([
         //   new THREE.Vector3(1, 0, 1),
@@ -381,7 +384,7 @@
         ]);
 
         let top = new THREE.Line(topGeometry, lineMaterial);
-        let bottom = new THREE.Line(bottomGeometry, lineMaterial);
+        let bottom = new THREE.Line(bottomGeometry, lineMaterial1);
 
         leftGeometry.setFromPoints([
           new THREE.Vector3(
