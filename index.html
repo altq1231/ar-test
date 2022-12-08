@@ -439,8 +439,8 @@
         ) {
           matrix[m] = [];
           for (
-            let i = -lineWidth + cubeWidth / 2 + seg;
-            i < 0;
+            let i = -lineWidth / 2 - cubeWidth - seg;
+            i < lineWidth / 2 + cubeWidth + seg;
             i += cubeWidth + seg, n++
           ) {
             // console.log("lineWidth", lineWidth, "i", i, "j", j);
