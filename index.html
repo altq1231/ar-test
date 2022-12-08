@@ -432,7 +432,11 @@
         let m = 0,
           n = 0;
         // 初始化所有方块设置为隐藏
-        for (let j = lineWidth; j > 0; j -= cubeWidth + seg, m++, n = 0) {
+        for (
+          let j = lineHeight / 2 - cubeWidth / 2 - seg;
+          j > -lineHeight / 2;
+          j -= cubeWidth + seg, m++, n = 0
+        ) {
           matrix[m] = [];
           for (
             let i = -lineWidth / 2;
@@ -442,7 +446,7 @@
             // console.log("lineWidth", lineWidth, "i", i, "j", j);
             mesh = mesh.clone(true);
             mesh.receiveShadow = true;
-            mesh.position.set(i, 0, j);
+            mesh.position.set(i, 0, -j);
             mesh.visible = false;
             matrix[m][n] = {
               cube: mesh,
