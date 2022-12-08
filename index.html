@@ -289,8 +289,6 @@
       let canUpdate = false;
       const imgUrl = "./image/cell.png";
 
-      console.log(1231231, new Tetris());
-
       //深度拷贝
       function copyArr(m) {
         return JSON.parse(JSON.stringify(m));
@@ -335,6 +333,57 @@
 
       initCubes();
       generateCube();
+
+      function generateLines(param) {
+        let rect = new THREE.Group();
+        let lineMaterial = new THREE.MeshBasicMaterial({
+          color: 0x2d2d2d,
+        });
+        // let TopAnBottomGeometry = new THREE.BufferGeometry();
+        // TopAnBottomGeometry.setFromPoints([
+        //   new THREE.Vector3(1, 0, 1),
+        //   new THREE.Vector3(1, 0, 2),
+        // ]);
+        // let topLine = new THREE.Line(TopAnBottomGeometry, lineMaterial);
+        // // scene.add(topLine);
+        // arWorldRoot.add(topLine);
+
+        let TopAnBottomGeometry = new THREE.BufferGeometry();
+        let LeftAndRightGeometry = new THREE.BufferGeometry();
+
+        TopAnBottomGeometry.setFromPoints([
+          new THREE.Vector3(
+            -lineWidth / 2,
+            0,
+            lineHeight / 2 - cubeWidth / 2 - seg
+          ),
+          new THREE.Vector3(
+            lineWidth / 2,
+            0,
+            lineHeight / 2 - cubeWidth / 2 - seg
+          ),
+        ]);
+
+        let top = new THREE.Line(TopAnBottomGeometry, lineMaterial);
+        let bottom = top.clone(true);
+        bottom.position.z = -lineHeight / 2;
+
+        LeftAndRightGeometry.setFromPoints([
+          new THREE.Vector3(
+            -lineWidth / 2,
+            0,
+            lineHeight / 2 - cubeWidth / 2 - seg
+          ),
+          new THREE.Vector3(-lineWidth / 2, 0, -lineHeight / 2),
+        ]);
+        let left = new THREE.Line(LeftAndRightGeometry, lineMaterial);
+        let right = left.clone(true);
+        right.position.x = lineWidth / 2;
+
+        rect.add(top, bottom, left, right);
+        scene.add(rect);
+        arWorldRoot.add(rect);
+      }
 
       //生成下一个方块
       function generateCube() {
