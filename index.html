@@ -353,16 +353,8 @@
         let LeftAndRightGeometry = new THREE.BufferGeometry();
 
         TopAnBottomGeometry.setFromPoints([
-          new THREE.Vector3(
-            -lineWidth / 2,
-            0,
-            lineHeight / 2 + cubeWidth / 2 + seg
-          ),
-          new THREE.Vector3(
-            lineWidth / 2,
-            0,
-            lineHeight / 2 + cubeWidth / 2 + seg
-          ),
+          new THREE.Vector3(-lineWidth / 2, 0, lineHeight / 2 + seg),
+          new THREE.Vector3(lineWidth / 2, 0, lineHeight / 2 + seg),
         ]);
 
         let top = new THREE.Line(TopAnBottomGeometry, lineMaterial);
@@ -373,7 +365,7 @@
           new THREE.Vector3(
             -lineWidth / 2 - cubeWidth / 2 - seg,
             0,
-            lineHeight / 2 - cubeWidth / 2 - seg
+            lineHeight / 2 + seg
           ),
           new THREE.Vector3(
             -lineWidth / 2 - cubeWidth / 2 - seg,
