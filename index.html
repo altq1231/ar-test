@@ -338,7 +338,7 @@
       function generateLines(param) {
         let rect = new THREE.Group();
         let lineMaterial = new THREE.MeshBasicMaterial({
-          color: 0xd0d7de,
+          color: 0x000000,
         });
         // let TopAnBottomGeometry = new THREE.BufferGeometry();
         // TopAnBottomGeometry.setFromPoints([
@@ -381,7 +381,7 @@
         let right = left.clone(true);
         right.position.x = lineWidth;
 
-        rect.add(top, bottom, left, right);
+        rect.add(top, left, right);
         scene.add(rect);
         arWorldRoot.add(rect);
       }
