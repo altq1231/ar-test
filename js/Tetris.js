@@ -703,5 +703,3 @@ class Tetris {
     return matrix[0].some(n => !!n)
   }
 }
-
-export default Tetris
