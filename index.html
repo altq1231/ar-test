@@ -356,13 +356,9 @@
           new THREE.Vector3(
             -lineWidth / 2,
             0,
-            lineHeight / 2 - cubeWidth / 2 - seg
+            lineHeight / 2 - cubeWidth - seg
           ),
-          new THREE.Vector3(
-            lineWidth / 2,
-            0,
-            lineHeight / 2 - cubeWidth / 2 - seg
-          ),
+          new THREE.Vector3(lineWidth / 2, 0, lineHeight / 2 - cubeWidth - seg),
         ]);
 
         let top = new THREE.Line(TopAnBottomGeometry, lineMaterial);
@@ -371,11 +367,15 @@
 
         LeftAndRightGeometry.setFromPoints([
           new THREE.Vector3(
-            -lineWidth / 2,
+            -lineWidth / 2 - cubeWidth - seg,
             0,
             lineHeight / 2 - cubeWidth / 2 - seg
           ),
-          new THREE.Vector3(-lineWidth / 2, 0, -lineHeight / 2),
+          new THREE.Vector3(
+            -lineWidth / 2 - cubeWidth - seg,
+            0,
+            -lineHeight / 2
+          ),
         ]);
         let left = new THREE.Line(LeftAndRightGeometry, lineMaterial);
         let right = left.clone(true);
