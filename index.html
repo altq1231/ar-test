@@ -383,7 +383,7 @@
         ]);
         let left = new THREE.Line(LeftAndRightGeometry, lineMaterial);
         let right = left.clone(true);
-        right.position.x = lineWidth + seg;
+        right.position.x = lineWidth + cubeWidth / 2 + seg;
 
         rect.add(top, left, right);
         scene.add(rect);
