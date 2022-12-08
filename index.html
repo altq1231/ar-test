@@ -335,9 +335,10 @@
       generateCube();
       generateLines();
 
-      function generateLines() {
+      function generateLines(param) {
+        let rect = new THREE.Group();
         let lineMaterial = new THREE.MeshBasicMaterial({
-          color: 0x2d2d2d,
+          color: 0xd0d7de,
         });
         // let TopAnBottomGeometry = new THREE.BufferGeometry();
         // TopAnBottomGeometry.setFromPoints([
@@ -357,16 +358,12 @@
             0,
             lineHeight / 2 - cubeWidth / 2 - seg
           ),
-          new THREE.Vector3(
-            lineWidth / 2,
-            0,
-            lineHeight / 2 - cubeWidth / 2 - seg
-          ),
+          new THREE.Vector3(lineWidth, 0, lineHeight / 2 - cubeWidth / 2 - seg),
         ]);
 
         let top = new THREE.Line(TopAnBottomGeometry, lineMaterial);
         let bottom = top.clone(true);
-        bottom.position.z = -lineHeight / 2;
+        bottom.position.z = -lineHeight;
 
         LeftAndRightGeometry.setFromPoints([
           new THREE.Vector3(
@@ -374,20 +371,15 @@
             0,
             lineHeight / 2 - cubeWidth / 2 - seg
           ),
-          new THREE.Vector3(-lineWidth / 2, 0, -lineHeight / 2),
+          new THREE.Vector3(-lineWidth / 2, 0, -lineHeight),
         ]);
         let left = new THREE.Line(LeftAndRightGeometry, lineMaterial);
         let right = left.clone(true);
-        right.position.x = lineWidth / 2;
+        right.position.x = lineWidth;
 
-        scene.add(top);
-        scene.add(right);
-        scene.add(bottom);
-        scene.add(left);
-        arWorldRoot.add(top);
-        arWorldRoot.add(right);
-        arWorldRoot.add(bottom);
-        arWorldRoot.add(left);
+        rect.add(top, bottom, left, right);
+        scene.add(rect);
+        arWorldRoot.add(rect);
       }
 
       //生成下一个方块
