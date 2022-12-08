@@ -335,7 +335,6 @@
       generateCube();
 
       function generateLines(param) {
-        let rect = new THREE.Group();
         let lineMaterial = new THREE.MeshBasicMaterial({
           color: 0x2d2d2d,
         });
@@ -380,9 +379,14 @@
         let right = left.clone(true);
         right.position.x = lineWidth / 2;
 
-        rect.add(top, bottom, left, right);
-        scene.add(rect);
-        arWorldRoot.add(rect);
+        scene.add(top);
+        scene.add(right);
+        scene.add(bottom);
+        scene.add(left);
+        arWorldRoot.add(top);
+        arWorldRoot.add(right);
+        arWorldRoot.add(bottom);
+        arWorldRoot.add(left);
       }
 
       //生成下一个方块
