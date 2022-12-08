@@ -374,12 +374,12 @@
           new THREE.Vector3(
             -lineWidth / 2 - cubeWidth / 2 - seg,
             0,
-            -lineHeight / 2 + cubeWidth / 2 + seg
+            -lineHeight / 2 - cubeWidth / 2 + seg
           ),
           new THREE.Vector3(
             lineWidth / 2 + cubeWidth / 2 + seg,
             0,
-            -lineHeight / 2 + cubeWidth / 2 + seg
+            -lineHeight / 2 - cubeWidth / 2 + seg
           ),
         ]);
 
@@ -523,9 +523,9 @@
         ) {
           matrix[m] = [];
           for (
-            let i = -lineWidth / 2 - cubeWidth / 2 - seg;
+            let i = -lineWidth / 2 + cubeWidth / 2 + seg;
             i < lineWidth / 2;
-            i += cubeWidth - seg, n++
+            i += cubeWidth + seg, n++
           ) {
             // console.log("lineWidth", lineWidth, "i", i, "j", j);
             mesh = mesh.clone(true);
