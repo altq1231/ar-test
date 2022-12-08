@@ -350,6 +350,7 @@
         // arWorldRoot.add(topLine);
 
         let topGeometry = new THREE.BufferGeometry();
+        let bottomGeometry = new THREE.BufferGeometry();
         let leftGeometry = new THREE.BufferGeometry();
         let rightGeometry = new THREE.BufferGeometry();
 
@@ -366,7 +367,21 @@
           ),
         ]);
 
+        bottomGeometry.setFromPoints([
+          new THREE.Vector3(
+            -lineWidth / 2 - cubeWidth / 2 - seg,
+            0,
+            -lineHeight / 2 - cubeWidth / 2 - seg
+          ),
+          new THREE.Vector3(
+            lineWidth / 2 + cubeWidth / 2 + seg,
+            0,
+            -lineHeight / 2 - cubeWidth / 2 - seg
+          ),
+        ]);
+
         let top = new THREE.Line(topGeometry, lineMaterial);
+        let bottom = new THREE.Line(bottomGeometry, lineMaterial);
 
         leftGeometry.setFromPoints([
           new THREE.Vector3(
@@ -397,7 +412,7 @@
         let left = new THREE.Line(leftGeometry, lineMaterial);
         let right = new THREE.Line(rightGeometry, lineMaterial);
 
-        rect.add(top, left, right);
+        rect.add(top, bottom, left, right);
         scene.add(rect);
         arWorldRoot.add(rect);
       }
