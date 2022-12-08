@@ -421,7 +421,7 @@
       function initCubes() {
         matrix = [];
         let matrixObject = new THREE.Object3D();
-        let cube = new THREE.BoxGeometry(cubeWidth, cubeWidth / 30, cubeWidth);
+        let cube = new THREE.BoxGeometry(cubeWidth, cubeWidth / 50, cubeWidth);
         let map = new THREE.TextureLoader().load(imgUrl);
         map.wrapS = map.mapT = THREE.RepeatWrapping;
         let material = new THREE.MeshLambertMaterial({
@@ -432,7 +432,7 @@
         let m = 0,
           n = 0;
         // 初始化所有方块设置为隐藏
-        for (let j = lineHeight; j > 0; j -= cubeWidth + seg, m++, n = 0) {
+        for (let j = lineWidth; j > 0; j -= cubeWidth + seg, m++, n = 0) {
           matrix[m] = [];
           for (
             let i = -lineWidth / 2;
