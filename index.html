@@ -421,7 +421,7 @@
       function initCubes() {
         matrix = [];
         let matrixObject = new THREE.Object3D();
-        let cube = new THREE.BoxGeometry(cubeWidth, cubeWidth / 50, cubeWidth);
+        let cube = new THREE.BoxGeometry(cubeWidth, cubeWidth / 30, cubeWidth);
         let map = new THREE.TextureLoader().load(imgUrl);
         map.wrapS = map.mapT = THREE.RepeatWrapping;
         let material = new THREE.MeshLambertMaterial({
