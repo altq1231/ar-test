@@ -178,8 +178,8 @@
             "https://ued.united-imaging.com/doc_server/doc_server/resource/src/343c761a5174cf7f427e30ba75ceb63f.dat",
           detectionMode: "mono",
           maxDetectionRate: 30,
-          canvasWidth: 80 * 3,
-          canvasHeight: 60 * 3,
+          canvasWidth: document.getElementById("arMain").offsetWidth,
+          canvasHeight: document.getElementById("arMain").offsetHeight,
         });
         // initialize it
         arToolkitContext.init(function onCompleted() {
