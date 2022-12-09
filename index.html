@@ -12,7 +12,7 @@
     <link href="./style/index.css" rel="stylesheet" type="text/css" />
     <!-- three.js library -->
     <script src="vendor/three.js/build/three.min.js"></script>
-    <script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
+    <!-- <script src="vendor/three.js/examples/js/libs/stats.min.js"></script> -->
     <!-- ar.js -->
     <script src="ar-threex.js"></script>
     <script>
@@ -312,12 +312,12 @@
       //
       //		render the whole thing on the page
       //
-      let stats = new Stats();
-      document.body.appendChild(stats.dom);
+      // let stats = new Stats();
+      // document.body.appendChild(stats.dom);
       // render the scene
       onRenderFcts.push(function () {
         renderer.render(scene, camera);
-        stats.update();
+        // stats.update();
       });
 
       // run the rendering loop
@@ -557,6 +557,12 @@
         }
       }
 
+      // 停止游戏
+      function startGame() {
+        haveStart = false;
+        clearInterval(timer);
+      }
+
       // 重新开始游戏
       function restartGame() {
         if (haveStart) {
@@ -659,11 +665,13 @@
           } else {
             // 如果发生碰撞了,先消除
             clearCubes();
+            console.log(11);
             generateCube();
           }
         } else {
           // 如果到最底层了，重新生成图案
           clearCubes();
+          console.log(22);
           generateCube();
         }
       }
