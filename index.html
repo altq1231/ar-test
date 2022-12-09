@@ -104,7 +104,11 @@
 
       renderer.setClearColor(new THREE.Color("lightgrey"), 0);
       renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      renderer.setSize(
+        document.getElementById("arMain").offsetWidth,
+        document.getElementById("arMain").offsetHeight
+      );
       renderer.domElement.style.position = "absolute";
       renderer.domElement.style.top = "0";
       renderer.domElement.style.left = "0";
@@ -237,7 +241,7 @@
       // scene.add(markerRoot);
 
       // // build a smoothedControls
-      let smoothedRoot = new THREE.Group();
+      var smoothedRoot = new THREE.Group();
       scene.add(smoothedRoot);
       let smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
         lerpPosition: 0.4,
