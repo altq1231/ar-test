@@ -260,7 +260,7 @@
       let arWorldRoot = smoothedRoot;
 
       // 设置一个方格长宽为20
-      let cubeWidth = 0.1;
+      let cubeWidth = 0.2;
       // 横向10格，纵向20格, 间隙为4
       let lineWidthSeg = 9,
         lineHeightSeg = 10,
@@ -534,7 +534,7 @@
             // console.log("lineWidth", lineWidth, "i", i, "j", j);
             mesh = mesh.clone(true);
             mesh.receiveShadow = true;
-            mesh.position.set(i, 0, -j);
+            mesh.position.set(i, 0.2, -j);
             mesh.visible = false;
             matrix[m][n] = {
               cube: mesh,
