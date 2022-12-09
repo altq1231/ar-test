@@ -10,9 +10,6 @@
     <title>Tetris</title>
     <link href="./style/global.css" rel="stylesheet" type="text/css" />
     <link href="./style/index.css" rel="stylesheet" type="text/css" />
-  </head>
-
-  <body style="margin: 0px; overflow: hidden; font-family: Monospace">
     <!-- three.js library -->
     <script src="vendor/three.js/build/three.min.js"></script>
     <script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
@@ -22,110 +19,118 @@
       THREEx.ArToolkitContext.baseURL = "../";
     </script>
     <script src="js/vconsole.min.js"></script>
-    <script src="js/Tetris.js"></script>
-    <script type="text/javascript">
-      var vConsole = new VConsole();
-    </script>
+    <!-- <script src="js/Tetris.js"></script> -->
 
     <!-- 模型加载 -->
     <script src="vendor/three.js/GLTFLoader.js"></script>
+  </head>
 
-    <div class="operation-container flex-row">
-      <div class="left-container flex-col">
-        <div class="start-container flex-row">
-          <div class="btn-container flex-col">
-            <button class="common-btn start-btn" onclick="startGame()"></button>
-            <span>Start</span>
-          </div>
-          <div class="btn-container flex-col">
-            <button
-              class="common-btn start-btn"
-              onclick="restartGame()"
-            ></button>
-            <span>Reset</span>
-          </div>
-        </div>
-      </div>
-      <div class="right-container">
-        <div class="direction-item flex-row">
-          <div class="btn-container flex-col rotation">
-            <button
-              class="common-btn start-btn"
-              onclick="rotateCell()"
-            ></button>
-            <span>Rotation</span>
-          </div>
-        </div>
-        <div class="direction-item flex-row">
-          <div class="btn-container flex-col left">
-            <button
-              class="common-btn start-btn"
-              onclick="moveLeftAndRight(0)"
-            ></button>
-            <span>Left</span>
-          </div>
-          <div class="btn-container flex-col right">
-            <button
-              class="common-btn start-btn"
-              onclick="moveLeftAndRight(1)"
-            ></button>
-            <span>Right</span>
-          </div>
-        </div>
-        <div class="direction-item flex-row">
-          <div class="btn-container flex-col bottom">
-            <button class="common-btn start-btn" onclick="moveDown()"></button>
-            <span>Bottom</span>
-          </div>
-        </div>
+  <body ontouchstart="" onmouseover="">
+    <!-- 1.开始界面 -->
+    <div id="readyMask" class="popup-mask">
+      <div class="popup-container game-modal" id="startModal">
+        <img class="model-bg" src="./image/start-modal.png" />
+        <button class="default-btn start-btn" onclick="startGame()">
+          <img class="bg-img" src="./image/start-btn.png" />
+        </button>
       </div>
     </div>
+
+    <!-- 3.结束界面 -->
+    <div id="overModal" class="popup-mask">
+      <div class="popup-container game-modal">
+        <img class="model-bg" src="./image/over-modal.png" />
+
+        <button class="default-btn" onclick="restartGame()">
+          <img class="bg-img" src="./image/over.png" />
+        </button>
+        <button class="default-btn again-btn" onclick="restartGame()">
+          <img class="bg-img" src="./image/again.png" />
+        </button>
+      </div>
+    </div>
+
+    <!-- 2.游戏界面 -->
+    <!-- =2.1 界面元素 -->
+    <!-- ==头部 -->
+    <div class="header">
+      <div class="header-content flex-row">
+        <div class="top-info left">
+          <img class="top-icon" src="./image/clock.png" />
+          <span id="clock" class="top-text">30</span>
+        </div>
+        <div class="top-info right">
+          <img class="top-icon" style="width: 26px" src="./image/star.png" />
+          <span id="score" class="top-text">0</span>
+        </div>
+        <div class="row-line"></div>
+        <div class="col-line"></div>
+      </div>
+    </div>
+    <!-- ==底部 -->
+    <div class="footer">
+      <div class="down-icon flex-row">
+        <button class="default-btn" onclick="moveLeftAndRight(0)">
+          <img class="bg-img" src="./image/left-btn.png" />
+        </button>
+        <button class="default-btn" onclick="rotateBlock()">
+          <img class="bg-img" src="./image/rotate.png" />
+        </button>
+        <button class="default-btn" onclick="moveLeftAndRight(1)">
+          <img class="bg-img" src="./image/right-btn.png" />
+        </button>
+        <div class="col-line"></div>
+      </div>
+    </div>
+    <!-- =2.2 ar建模元素 -->
+    <!-- ==成像区 -->
+    <div id="arMain" class="ar-main"></div>
+
     <script>
-      //////////////////////////////////////////////////////////////////////////////////
-      //		Init
-      //////////////////////////////////////////////////////////////////////////////////
+      let vConsole = new VConsole();
+
+      //  Init
 
       let width = window.innerWidth,
         height = window.innerHeight;
       console.log("window.innerWidth", width, height);
+
       // init renderer
-      var renderer = new THREE.WebGLRenderer({
+      let renderer = new THREE.WebGLRenderer({
         antialias: true,
+        precision: "highp", //333
         alpha: true,
       });
+
       renderer.setClearColor(new THREE.Color("lightgrey"), 0);
-      // renderer.setPixelRatio( 1/2 );
+      renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.domElement.style.position = "absolute";
       renderer.domElement.style.top = "0";
       renderer.domElement.style.left = "0";
-      document.body.appendChild(renderer.domElement);
+      document.getElementById("arMain").appendChild(renderer.domElement);
 
       // array of functions for the rendering loop
-      var onRenderFcts = [];
-      var onRenderFctsmy = {};
+      let onRenderFcts = [];
+      let onRenderFctsmy = {};
 
-      var arToolkitContext, artoolkitMarker, markerRoot;
+      let arToolkitContext, artoolkitMarker, markerRoot;
 
       // init scene and camera
-      var scene = new THREE.Scene();
+      let scene = new THREE.Scene();
 
-      //////////////////////////////////////////////////////////////////////////////////
       //		Initialize a basic camera
-      //////////////////////////////////////////////////////////////////////////////////
 
       // Create a camera
-      var camera = new THREE.Camera();
+      let camera = new THREE.Camera();
       scene.add(camera);
 
       markerRoot = new THREE.Group();
       scene.add(markerRoot);
 
-      ////////////////////////////////////////////////////////////////////////////////
-      //          handle arToolkitSource
-      ////////////////////////////////////////////////////////////////////////////////
+      // handle arToolkitSource
 
-      var arToolkitSource = new THREEx.ArToolkitSource({
+      let arToolkitSource = new THREEx.ArToolkitSource({
         // to read from the webcam
         sourceType: "webcam",
 
@@ -157,9 +162,8 @@
           );
         }
       }
-      ////////////////////////////////////////////////////////////////////////////////
-      //          initialize arToolkitContext
-      ////////////////////////////////////////////////////////////////////////////////
+
+      //  initialize arToolkitContext
 
       // create atToolkitContext
       function initARContext() {
@@ -180,7 +184,6 @@
           arToolkitContext.arController.orientation = getSourceOrientation();
           arToolkitContext.arController.options.orientation =
             getSourceOrientation();
-
           console.log("arToolkitContext", arToolkitContext);
           window.arToolkitContext = arToolkitContext;
         });
@@ -228,17 +231,15 @@
         arToolkitContext.update(arToolkitSource.domElement);
       });
 
-      ////////////////////////////////////////////////////////////////////////////////
       //          Create a ArMarkerControls
-      ////////////////////////////////////////////////////////////////////////////////
 
-      var markerRoot = new THREE.Group();
-      scene.add(markerRoot);
+      // let markerRoot = new THREE.Group();
+      // scene.add(markerRoot);
 
       // // build a smoothedControls
-      var smoothedRoot = new THREE.Group();
+      let smoothedRoot = new THREE.Group();
       scene.add(smoothedRoot);
-      var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
+      let smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
         lerpPosition: 0.4,
         lerpQuaternion: 0.3,
         lerpScale: 1,
@@ -246,11 +247,11 @@
       onRenderFcts.push(function (delta) {
         smoothedControls.update(markerRoot);
       });
-      // //////////////////////////////////////////////////////////////////////////////////
+      // //
       // //		add an object in the scene
-      // //////////////////////////////////////////////////////////////////////////////////
+      // //
 
-      var arWorldRoot = smoothedRoot;
+      let arWorldRoot = smoothedRoot;
 
       // 设置一个方格长宽为20
       let cubeWidth = 0.1;
@@ -295,17 +296,17 @@
       }
 
       // 光
-      var ambient = new THREE.AmbientLight(0xffffff);
+      let ambient = new THREE.AmbientLight(0xffffff);
       scene.add(ambient);
 
-      var directctionalLight = new THREE.DirectionalLight(0xffffff);
+      let directctionalLight = new THREE.DirectionalLight(0xffffff);
       directctionalLight.position.set(1, 1, 1).normalize();
       scene.add(directctionalLight);
 
-      //////////////////////////////////////////////////////////////////////////////////
+      //
       //		render the whole thing on the page
-      //////////////////////////////////////////////////////////////////////////////////
-      var stats = new Stats();
+      //
+      let stats = new Stats();
       document.body.appendChild(stats.dom);
       // render the scene
       onRenderFcts.push(function () {
@@ -314,13 +315,13 @@
       });
 
       // run the rendering loop
-      var lastTimeMsec = null;
+      let lastTimeMsec = null;
       requestAnimationFrame(function animate(nowMsec) {
         // keep looping
         requestAnimationFrame(animate);
         // measure time
         lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60;
-        var deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
+        let deltaMsec = Math.min(200, nowMsec - lastTimeMsec);
         lastTimeMsec = nowMsec;
         // call each update function
         onRenderFcts.forEach(function (onRenderFct) {
@@ -566,8 +567,8 @@
       }
 
       // 旋转
-      function rotateCell() {
-        console.log("rotateCell");
+      function rotateBlock() {
+        console.log("rotateBlock");
 
         let pos = currentCube.position;
         let copy = copyArr(currentCube.position);
