@@ -574,7 +574,6 @@
 
       function leaveGame() {
         countDownNum = 30;
-        console.log(countDownNum);
         document.getElementById("clock").innerHTML = countDownNum;
         score = 0;
         updateScore(0);
@@ -603,7 +602,6 @@
 
           gameTimer = setInterval(() => {
             countDownNum--;
-            console.log(countDownNum);
             document.getElementById("clock").innerHTML = countDownNum;
             if (countDownNum === 0) {
               clearInterval(gameTimer);
@@ -634,6 +632,7 @@
         });
         generateCube();
         haveStart = false;
+        countDownNum = 30;
         startGame();
       }
 
@@ -839,7 +838,7 @@
         }
         if (lineNumber.length > 0) {
           //加分
-          score += lineNumber.length * lineWidthSeg;
+          score += lineNumber.length * 100;
           updateScore(score);
           // scoreLabel.material.map = new THREE.CanvasTexture(
           //   generateSprite("score:" + score, "red")
