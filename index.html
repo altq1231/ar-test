@@ -25,9 +25,9 @@
     <script src="vendor/three.js/GLTFLoader.js"></script>
   </head>
 
-  <body ontouchstart="" onmouseover="">
+  <body>
     <!-- 1.开始界面 -->
-    <div id="readyMask" class="popup-mask">
+    <div id="readyMask" class="popup-mask is-visible">
       <div class="popup-container game-modal" id="startModal">
         <img class="model-bg" src="./image/start-modal.png" />
         <button class="default-btn start-btn" onclick="startGame()">
@@ -432,7 +432,8 @@
           // scoreLabel.material.map = new THREE.CanvasTexture(
           //   generateSprite("score:" + score, "red")
           // );
-          return restartGame();
+          return clearInterval(timer);
+          // return restartGame();
         }
         let types = [
           new Cube(1, [
@@ -546,19 +547,37 @@
         arWorldRoot.add(matrixObject);
       }
 
-      // 开始游戏
-      function startGame() {
-        console.log("startGame");
-        if (!haveStart) {
-          timer = setInterval(() => {
-            moveDown();
-          }, speed);
-          haveStart = true;
+      function showOrHidePopup(dom, isShow) {
+        const dom = document.getElementById(dom);
+        if (isShow) {
+          if (dom.classList.contains("is-visible")) {
+            return;
+          } else {
+            dom.classList.add("is-visible");
+          }
+        } else {
+          if (dom.classList.contains("is-visible")) {
+            dom.classList.remove("is-visible");
+          } else {
+            return;
+          }
         }
       }
 
-      // 停止游戏
+      // 开始游戏
       function startGame() {
+        console.log("startGame");
+        showOrHidePopup("readyModal", false);
+        // if (!haveStart) {
+        //   timer = setInterval(() => {
+        //     moveDown();
+        //   }, speed);
+        //   haveStart = true;
+        // }
+      }
+
+      // 停止游戏
+      function stopGame() {
         haveStart = false;
         clearInterval(timer);
       }
