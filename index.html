@@ -549,7 +549,6 @@
 
       function showOrHidePopup(key, isShow) {
         const domNode = document.getElementById(key);
-        console.log(1111, domNode);
         if (isShow) {
           if (domNode.classList.contains("is-visible")) {
             return;
@@ -566,6 +565,15 @@
       }
 
       function leaveGame() {
+        score = 0;
+        clearInterval(timer);
+        matrix.forEach((m) => {
+          m.forEach((n) => {
+            n.cube.visible = false;
+          });
+        });
+        generateCube();
+        haveStart = false;
         showOrHidePopup("overModal", false);
         showOrHidePopup("readyModal", true);
       }
@@ -592,17 +600,16 @@
       // 重新开始游戏
       function restartGame() {
         showOrHidePopup("overModal", false);
-        if (haveStart) {
-          score = 0;
-          clearInterval(timer);
-          matrix.forEach((m) => {
-            m.forEach((n) => {
-              n.cube.visible = false;
-            });
+
+        score = 0;
+        clearInterval(timer);
+        matrix.forEach((m) => {
+          m.forEach((n) => {
+            n.cube.visible = false;
           });
-          generateCube();
-          haveStart = false;
-        }
+        });
+        generateCube();
+        haveStart = false;
       }
 
       // 旋转
