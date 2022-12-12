@@ -432,6 +432,8 @@
         if (isLose()) {
           score = 0;
           updateScore();
+          countDownNum = 30;
+          document.getElementById("clock").innerHTML = countDownNum;
           // scoreLabel.material.map = new THREE.CanvasTexture(
           //   generateSprite("score:" + score, "red")
           // );
@@ -636,6 +638,7 @@
         haveStart = false;
         clearInterval(gameTimer);
         countDownNum = 30;
+        document.getElementById("clock").innerHTML = countDownNum;
         startGame();
       }
 
