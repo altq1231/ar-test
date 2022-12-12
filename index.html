@@ -432,7 +432,7 @@
           // scoreLabel.material.map = new THREE.CanvasTexture(
           //   generateSprite("score:" + score, "red")
           // );
-          return clearInterval(timer);
+          return stopGame();
           // return restartGame();
         }
         var types = [
@@ -586,6 +586,7 @@
       function stopGame() {
         haveStart = false;
         clearInterval(timer);
+        showOrHidePopup("overModal", true);
       }
 
       // 重新开始游戏
