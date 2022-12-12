@@ -573,6 +573,7 @@
       }
 
       function leaveGame() {
+        clearInterval(gameTimer);
         countDownNum = 30;
         document.getElementById("clock").innerHTML = countDownNum;
         score = 0;
@@ -614,6 +615,7 @@
       // 停止游戏
       function stopGame() {
         haveStart = false;
+        clearInterval(gameTimer);
         clearInterval(timer);
         showOrHidePopup("overModal", true);
       }
@@ -632,6 +634,7 @@
         });
         generateCube();
         haveStart = false;
+        clearInterval(gameTimer);
         countDownNum = 30;
         startGame();
       }
