@@ -171,7 +171,7 @@
 
       // create atToolkitContext
       function initARContext() {
-        console.log("initARContext()");
+        // console.log("initARContext()");
 
         arToolkitContext = new THREEx.ArToolkitContext({
           cameraParametersUrl:
@@ -188,7 +188,7 @@
           arToolkitContext.arController.orientation = getSourceOrientation();
           arToolkitContext.arController.options.orientation =
             getSourceOrientation();
-          console.log("arToolkitContext", arToolkitContext);
+          // console.log("arToolkitContext", arToolkitContext);
           window.arToolkitContext = arToolkitContext;
         });
         artoolkitMarker = new THREEx.ArMarkerControls(
@@ -210,20 +210,20 @@
           return null;
         }
 
-        console.log(
-          "actual source dimensions",
-          arToolkitSource.domElement.videoWidth,
-          arToolkitSource.domElement.videoHeight
-        );
+        // console.log(
+        //   "actual source dimensions",
+        //   arToolkitSource.domElement.videoWidth,
+        //   arToolkitSource.domElement.videoHeight
+        // );
 
         if (
           arToolkitSource.domElement.videoWidth >
           arToolkitSource.domElement.videoHeight
         ) {
-          console.log("source orientation", "landscape");
+          // console.log("source orientation", "landscape");
           return "landscape";
         } else {
-          console.log("source orientation", "portrait");
+          // console.log("source orientation", "portrait");
           return "portrait";
         }
       }
@@ -295,6 +295,8 @@
       var scoreLabel;
       var canUpdate = false;
       const imgUrl = "./image/cell.png";
+      var countDownNum = 30;
+      var gameTimer = null;
 
       //深度拷贝
       function copyArr(m) {
@@ -429,6 +431,7 @@
         // 判断是否输了
         if (isLose()) {
           score = 0;
+          updateScore();
           // scoreLabel.material.map = new THREE.CanvasTexture(
           //   generateSprite("score:" + score, "red")
           // );
@@ -564,8 +567,17 @@
         }
       }
 
+      function updateScore(propScore) {
+        const scoreN = propScore || score;
+        document.getElementById("score").innerHTML = scoreN;
+      }
+
       function leaveGame() {
+        countDownNum = 30;
+        console.log(countDownNum);
+        document.getElementById("clock").innerHTML = countDownNum;
         score = 0;
+        updateScore(0);
         clearInterval(timer);
         matrix.forEach((m) => {
           m.forEach((n) => {
@@ -587,6 +599,17 @@
             moveDown();
           }, speed);
           haveStart = true;
+          console.log(haveStart);
+
+          gameTimer = setInterval(() => {
+            countDownNum--;
+            console.log(countDownNum);
+            document.getElementById("clock").innerHTML = countDownNum;
+            if (countDownNum === 0) {
+              clearInterval(gameTimer);
+              stopGame();
+            }
+          }, 1000);
         }
       }
 
@@ -602,6 +625,7 @@
         showOrHidePopup("overModal", false);
 
         score = 0;
+        updateScore(0);
         clearInterval(timer);
         matrix.forEach((m) => {
           m.forEach((n) => {
@@ -610,12 +634,13 @@
         });
         generateCube();
         haveStart = false;
+        startGame();
       }
 
       // 旋转
       function rotateBlock() {
         if (haveStart) {
-          console.log("rotateBlock");
+          // console.log("rotateBlock");
 
           var pos = currentCube.position;
           var copy = copyArr(currentCube.position);
@@ -672,7 +697,7 @@
       // 向下移动
       function moveDown() {
         if (haveStart) {
-          console.log("moveDown", currentCube);
+          // console.log("moveDown", currentCube);
           var pos = currentCube.position;
           var x, y;
           var newPos = [];
@@ -702,13 +727,11 @@
             } else {
               // 如果发生碰撞了,先消除
               clearCubes();
-              console.log(11);
               generateCube();
             }
           } else {
             // 如果到最底层了，重新生成图案
             clearCubes();
-            console.log(22);
             generateCube();
           }
         }
@@ -817,6 +840,7 @@
         if (lineNumber.length > 0) {
           //加分
           score += lineNumber.length * lineWidthSeg;
+          updateScore(score);
           // scoreLabel.material.map = new THREE.CanvasTexture(
           //   generateSprite("score:" + score, "red")
           // );
