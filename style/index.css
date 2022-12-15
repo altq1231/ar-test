@@ -89,15 +89,9 @@ video {
   overflow: hidden;
 }
 .tetris-container {
-  /* 作为背景 */
   /* 顶部 */
   /* 底部 */
   /* 弹窗 */
-}
-.tetris-container .bg-img {
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 100% 100%;
 }
 .tetris-container .tetris-header {
   position: absolute;

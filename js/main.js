@@ -586,7 +586,7 @@ function rotateBlock() {
 // 向下移动
 function moveDown() {
   if (tetrisHaveStart) {
-    console.log("moveDown", tetrisMatrix, currentTetrisCube);
+    // console.log("moveDown", tetrisMatrix, currentTetrisCube);
     let pos = currentTetrisCube.position;
     let x, y;
     let newPos = [];
