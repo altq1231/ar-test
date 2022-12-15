@@ -88,14 +88,18 @@ video {
   height: 73% !important;
   overflow: hidden;
 }
-/* 作为背景 */
-.bg-img {
+.tetris-container {
+  /* 作为背景 */
+  /* 顶部 */
+  /* 底部 */
+  /* 弹窗 */
+}
+.tetris-container .bg-img {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 100% 100%;
 }
-/* 顶部 */
-.header {
+.tetris-container .tetris-header {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -106,7 +110,7 @@ video {
   border-bottom: 3px solid #272727;
   overflow: hidden;
 }
-.header-content {
+.tetris-container .header-content {
   width: 100%;
   height: 100%;
   align-items: flex-end;
@@ -114,7 +118,7 @@ video {
   padding: 0 30px 10px;
   position: relative;
 }
-.header-content .row-line {
+.tetris-container .header-content .row-line {
   height: 100%;
   width: 26px;
   background-color: #efa052;
@@ -124,7 +128,7 @@ video {
   left: 64px;
   top: 0;
 }
-.header-content .col-line {
+.tetris-container .header-content .col-line {
   width: 100%;
   height: 26px;
   background-color: #efa052;
@@ -134,7 +138,7 @@ video {
   left: 0;
   bottom: 16px;
 }
-.header-content .top-info {
+.tetris-container .header-content .top-info {
   background-color: #efa052;
   border: 3px solid #000000;
   border-radius: 20px;
@@ -146,20 +150,19 @@ video {
   /* 顶部图标 */
   /* 顶部文本 */
 }
-.header-content .top-info .top-icon {
+.tetris-container .header-content .top-info .top-icon {
   flex: 0 0 30px;
   width: 30px;
   height: 30px;
   margin-left: 20px;
 }
-.header-content .top-info .top-text {
+.tetris-container .header-content .top-info .top-text {
   color: #000000;
   font-weight: bold;
   font-size: 24px;
   margin-left: 8px;
 }
-/* 底部 */
-.footer {
+.tetris-container .tetris-footer {
   position: absolute;
   left: 0px;
   bottom: 0px;
@@ -168,14 +171,14 @@ video {
   background-color: #27896c;
   min-height: 70px;
 }
-.down-icon {
+.tetris-container .down-icon {
   height: 100%;
   width: 100%;
   align-items: center;
   justify-content: space-evenly;
   position: relative;
 }
-.down-icon .col-line {
+.tetris-container .down-icon .col-line {
   width: 100%;
   height: 26px;
   background-color: #efa052;
@@ -186,7 +189,7 @@ video {
   top: 50%;
   transform: translateY(-50%);
 }
-.default-btn {
+.tetris-container .default-btn {
   background-color: transparent;
   border: 0px;
   width: 98px;
@@ -201,20 +204,20 @@ video {
   -moz-user-focus: none;
   -moz-user-select: none;
 }
-.default-btn:hover,
-.default-btn:active,
-.default-btn:focus,
-.default-btn:visited {
+.tetris-container .default-btn:hover,
+.tetris-container .default-btn:active,
+.tetris-container .default-btn:focus,
+.tetris-container .default-btn:visited {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
   outline: none;
   background: none;
   text-decoration: none;
 }
-.default-btn:active {
+.tetris-container .default-btn:active {
   transform: scale(0.96);
 }
-.default-btn img {
+.tetris-container .default-btn img {
   width: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
@@ -223,7 +226,7 @@ video {
   -moz-user-select: none;
   user-select: none;
 }
-.popup-mask {
+.tetris-container .popup-mask {
   position: fixed;
   left: 0;
   top: 0;
@@ -238,35 +241,34 @@ video {
   align-items: center;
   justify-content: center;
 }
-.popup-mask.is-visible {
+.tetris-container .popup-mask.is-visible {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.3s 0s, visibility 0s 0s;
 }
-.popup-mask.is-visible .popup-container {
+.tetris-container .popup-mask.is-visible .popup-container {
   transform: translateY(0);
 }
-.popup-mask .popup-container {
+.tetris-container .popup-mask .popup-container {
   transform: translateY(-30px);
   transition-property: transform;
   transition-duration: 0.3s;
 }
-/* 弹窗 */
-.game-modal {
+.tetris-container .game-modal {
   width: 275px;
 }
-.game-modal .model-bg {
+.tetris-container .game-modal .model-bg {
   width: 100%;
 }
-.game-modal .default-btn {
+.tetris-container .game-modal .default-btn {
   position: absolute;
   bottom: 30px;
   left: 30px;
 }
-.game-modal .start-btn {
+.tetris-container .game-modal .start-btn {
   left: 30px;
   width: 215px;
 }
-.game-modal .again-btn {
+.tetris-container .game-modal .again-btn {
   left: 148px;
 }

@@ -26,60 +26,62 @@
   </head>
 
   <body>
-    <!-- 1.开始界面 -->
-    <div id="readyModal" class="popup-mask is-visible">
-      <div class="popup-container game-modal" id="startModal">
-        <img class="model-bg" src="./image/start-modal.png" />
-        <button class="default-btn start-btn" onclick="startTetrisGame()">
-          <img class="bg-img" src="./image/start-btn.png" />
-        </button>
-      </div>
-    </div>
-
-    <!-- 3.结束界面 -->
-    <div id="overModal" class="popup-mask">
-      <div class="popup-container game-modal">
-        <img class="model-bg" src="./image/over-modal.png" />
-
-        <button class="default-btn" onclick="leaveTetrisGame()">
-          <img class="bg-img" src="./image/over.png" />
-        </button>
-        <button class="default-btn again-btn" onclick="restartTetrisGame()">
-          <img class="bg-img" src="./image/again.png" />
-        </button>
-      </div>
-    </div>
-
-    <!-- 2.游戏界面 -->
-    <!-- =2.1 界面元素 -->
-    <!-- ==头部 -->
-    <div class="header">
-      <div class="header-content flex-row">
-        <div class="top-info left">
-          <img class="top-icon" src="./image/clock.png" />
-          <span id="tetrisClock" class="top-text">30</span>
+    <div class="tetris-container">
+      <!-- 1.开始界面 -->
+      <div id="readyModal" class="popup-mask is-visible">
+        <div class="popup-container game-modal" id="startModal">
+          <img class="model-bg" src="./image/start-modal.png" />
+          <button class="default-btn start-btn" onclick="startTetrisGame()">
+            <img class="bg-img" src="./image/start-btn.png" />
+          </button>
         </div>
-        <div class="top-info right">
-          <img class="top-icon" style="width: 26px" src="./image/star.png" />
-          <span id="tetrisScore" class="top-text">0</span>
-        </div>
-        <div class="row-line"></div>
-        <div class="col-line"></div>
       </div>
-    </div>
-    <!-- ==底部 -->
-    <div class="footer">
-      <div class="down-icon flex-row">
-        <button class="default-btn" onclick="moveLeftAndRight(0)">
-          <img class="bg-img" src="./image/left-btn.png" />
-        </button>
-        <button class="default-btn" onclick="rotateBlock()">
-          <img class="bg-img" src="./image/rotate.png" />
-        </button>
-        <button class="default-btn" onclick="moveLeftAndRight(1)">
-          <img class="bg-img" src="./image/right-btn.png" />
-        </button>
-        <div class="col-line"></div>
+
+      <!-- 3.结束界面 -->
+      <div id="overModal" class="popup-mask">
+        <div class="popup-container game-modal">
+          <img class="model-bg" src="./image/over-modal.png" />
+
+          <button class="default-btn" onclick="leaveTetrisGame()">
+            <img class="bg-img" src="./image/over.png" />
+          </button>
+          <button class="default-btn again-btn" onclick="restartTetrisGame()">
+            <img class="bg-img" src="./image/again.png" />
+          </button>
+        </div>
+      </div>
+
+      <!-- 2.游戏界面 -->
+      <!-- =2.1 界面元素 -->
+      <!-- ==头部 -->
+      <div class="tetris-header">
+        <div class="header-content flex-row">
+          <div class="top-info left">
+            <img class="top-icon" src="./image/clock.png" />
+            <span id="tetrisClock" class="top-text">30</span>
+          </div>
+          <div class="top-info right">
+            <img class="top-icon" style="width: 26px" src="./image/star.png" />
+            <span id="tetrisScore" class="top-text">0</span>
+          </div>
+          <div class="row-line"></div>
+          <div class="col-line"></div>
+        </div>
+      </div>
+      <!-- ==底部 -->
+      <div class="tetris-footer">
+        <div class="down-icon flex-row">
+          <button class="default-btn" onclick="moveLeftAndRight(0)">
+            <img class="bg-img" src="./image/left-btn.png" />
+          </button>
+          <button class="default-btn" onclick="rotateBlock()">
+            <img class="bg-img" src="./image/rotate.png" />
+          </button>
+          <button class="default-btn" onclick="moveLeftAndRight(1)">
+            <img class="bg-img" src="./image/right-btn.png" />
+          </button>
+          <div class="col-line"></div>
+        </div>
       </div>
     </div>
     <!-- =2.2 ar建模元素 -->
