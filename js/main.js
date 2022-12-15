@@ -1,4 +1,4 @@
-// var vConsole = new VConsole();
+var vConsole = new VConsole();
 
 //  Init
 
@@ -107,7 +107,7 @@ function initARContext() {
     tetrisArToolkitContext,
     tetrisMarkerRoot, {
       type: "pattern",
-      patternUrl: "https://ued.united-imaging.com/doc_server/doc_server/resource/src/85f64abbf9419cb7808d623ec78801c1.patt",
+      patternUrl: "https://ued.united-imaging.com/doc_server/doc_server/resource/src/9a3ca4a7d3a818ed6f14a1e7c995142b.patt",
     }
   );
 }
@@ -144,22 +144,22 @@ onRenderFcts.push(function () {
   tetrisArToolkitContext.update(arToolkitSource.domElement);
 });
 
-// // build a smoothedControls
-var smoothedRoot = new THREE.Group();
-scene.add(smoothedRoot);
-var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
+// // build a tetrisSmoothedControls
+var tetrisSmoothedRoot = new THREE.Group();
+scene.add(tetrisSmoothedRoot);
+var tetrisSmoothedControls = new THREEx.ArSmoothedControls(tetrisSmoothedRoot, {
   lerpPosition: 0.4,
   lerpQuaternion: 0.3,
   lerpScale: 1,
 });
 onRenderFcts.push(function (delta) {
-  smoothedControls.update(tetrisMarkerRoot);
+  tetrisSmoothedControls.update(tetrisMarkerRoot);
 });
 // //
 // //		add an object in the scene
 // //
 
-var arWorldRoot = smoothedRoot;
+var tetrisArWorldRoot = tetrisSmoothedRoot;
 
 
 class Cube {
@@ -315,7 +315,7 @@ function generateLines(param) {
 
   rect.add(top, bottom, left, right);
   scene.add(rect);
-  arWorldRoot.add(rect);
+  tetrisArWorldRoot.add(rect);
 }
 
 //生成下一个方块
@@ -434,7 +434,7 @@ function initTetrisCubes() {
     }
   }
   scene.add(matrixObject);
-  arWorldRoot.add(matrixObject);
+  tetrisArWorldRoot.add(matrixObject);
 }
 
 function showOrHidePopup(key, isShow) {
