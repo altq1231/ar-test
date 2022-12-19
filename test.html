@@ -60,49 +60,6 @@
     </style>
   </head>
   <body>
-    <script src="./js/vconsole.min.js"></script>
-    <script src="./js/ocrad.js"></script>
-    <script>
-      var vConsole = new VConsole();
-
-      function recognize_snapshot() {
-        document.getElementById("text").innerText = "(Recognizing...)";
-        document.getElementById("transcription").className = "recognizing";
-        OCRAD(
-          document.getElementById("video"),
-          {
-            invert: document.getElementById("whiteText").checked, // set this for white on black text
-          },
-          function (text) {
-            document.getElementById("transcription").className = "done";
-            document.getElementById("text").innerText = text || "(empty)";
-          }
-        );
-      }
-
-      function acquiredVideo(stream) {
-        var video = document.getElementById("video");
-        if ("mozSrcObject" in video) {
-          video.mozSrcObject = stream;
-        } else if (window.webkitURL) {
-          video.src = window.webkitURL.createObjectURL(stream);
-        } else {
-          video.src = stream;
-        }
-        console.log("acquiredVideo", stream);
-        video.play();
-
-        document.getElementById("blackText").checked = true;
-      }
-      window.onload = function () {
-        const videoDom = document.getElementById("video");
-        navigator.mediaDevices
-          .getUserMedia({ audio: true, video: true })
-          .then((stream) => (videoDom.srcObject = stream))
-          .catch((err) => console.log("获取视频流错误", err));
-      };
-    </script>
-
     <div id="main" class="flex-col">
       <video
         class="top-video"
@@ -136,5 +93,85 @@
         </div>
       </div>
     </div>
+    <script src="./js/vconsole.min.js"></script>
+    <script src="./js/ocrad.js"></script>
+    <script>
+      var vConsole = new VConsole();
+      var videoDom = document.querySelector("video");
+      // 一堆兼容代码
+      window.URL =
+        window.URL || window.webkitURL || window.mozURL || window.msURL;
+      if (navigator.mediaDevices === undefined) {
+        navigator.mediaDevices = {};
+      }
+      if (navigator.mediaDevices.getUserMedia === undefined) {
+        navigator.mediaDevices.getUserMedia = function (constraints) {
+          var getUserMedia =
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia;
+          if (!getUserMedia) {
+            return Promise.reject(
+              new Error("getUserMedia is not implemented in this browser")
+            );
+          }
+          return new Promise(function (resolve, reject) {
+            getUserMedia.call(navigator, constraints, resolve, reject);
+          });
+        };
+      }
+
+      function recognize_snapshot() {
+        document.getElementById("text").innerText = "(Recognizing...)";
+        document.getElementById("transcription").className = "recognizing";
+        OCRAD(
+          document.getElementById("video"),
+          {
+            invert: document.getElementById("whiteText").checked, // set this for white on black text
+          },
+          function (text) {
+            document.getElementById("transcription").className = "done";
+            document.getElementById("text").innerText = text || "(empty)";
+          }
+        );
+      }
+
+      function acquiredVideo(stream) {
+        var video = document.getElementById("video");
+        if ("mozSrcObject" in video) {
+          video.mozSrcObject = stream;
+        } else if (window.webkitURL) {
+          video.src = window.webkitURL.createObjectURL(stream);
+        } else {
+          video.src = stream;
+        }
+        console.log("acquiredVideo", stream);
+        video.play();
+
+        document.getElementById("blackText").checked = true;
+      }
+
+      // 回调
+      function successFunc(stream) {
+        if ("srcObject" in videoDom) {
+          videoDom.srcObject = stream;
+        } else {
+          videoDom.src =
+            (window.URL && window.URL.createObjectURL(stream)) || stream;
+        }
+        videoDom.play();
+      }
+
+      window.onload = function () {
+        navigator.mediaDevices
+          .getUserMedia({
+            audio: false,
+            video: true,
+            facingMode: { exact: "environment" },
+          })
+          .then(successFunc)
+          .catch((err) => console.log("获取视频流错误", err));
+      };
+    </script>
   </body>
 </html>
