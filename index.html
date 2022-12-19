@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="ch-ZN">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -7,171 +7,86 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Tetris</title>
     <link href="./style/global.css" rel="stylesheet" type="text/css" />
-    <title>Webcam Ocrad.js Example</title>
-    <style>
-      body {
-        background: whiteSmoke;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        padding: 0 10px;
-      }
-      #transcription,
-      #video {
-        background: white;
-        border: 1px solid #ddd;
-        margin: 10px 0;
-      }
-      .top-video {
-        flex: 0 0 40%;
-        height: 40%;
-        width: 100%;
-        object-fit: cover;
-      }
+    <link href="./style/index.css" rel="stylesheet" type="text/css" />
+    <!-- three.js library -->
+    <script src="vendor/three.js/build/three.min.js"></script>
+    <!-- <script src="vendor/three.js/examples/js/libs/stats.min.js"></script> -->
+    <!-- ar.js -->
+    <script src="ar-threex.js"></script>
+    <script>
+      THREEx.ArToolkitContext.baseURL = "../";
+    </script>
+    <script src="js/vconsole.min.js"></script>
+    <script src="js/UGameTetris.js"></script>
 
-      #text {
-        font-size: 25px;
-        text-align: center;
-        flex-grow: 1;
-        padding: 30px;
-      }
-      #transcription {
-        width: 100%;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-      }
-      #controls {
-        padding: 20px;
-        color: #222;
-        border-top: 1px solid #ddd;
-        background: whiteSmoke;
-      }
-      #main {
-        display: flex;
-      }
-      #transcription.recognizing {
-        color: gray;
-      }
-      #transcription.done {
-        color: black;
-      }
-    </style>
+    <!-- 模型加载 -->
+    <script src="vendor/three.js/GLTFLoader.js"></script>
   </head>
+
   <body>
-    <div id="main" class="flex-col">
-      <video
-        class="top-video"
-        id="video"
-        src="https://ued.united-imaging.com/doc_server/doc_server/resource/src/faa22ad0d4cd6ec468690f53e91bc1f1.mp4"
-        mute
-        autoplay
-        onclick="recognize_snapshot()"
-      ></video>
-      <div id="transcription" class="bottom-text fill-flex">
-        <div id="text">Click on the video to recognize a still capture</div>
-        <div id="controls">
-          <input
-            type="radio"
-            name="textColor"
-            id="whiteText"
-            value="white"
-            checked
-            onchange="recognize_snapshot()"
-          />
-          <label for="whiteText"><b>White Text</b> on Dark Background</label
-          ><br />
-          <input
-            type="radio"
-            name="textColor"
-            id="blackText"
-            value="black"
-            onchange="recognize_snapshot()"
-          />
-          <label for="blackText"><b>Black Text</b> on Light Background</label>
+    <div class="tetris-container">
+      <!-- 1.开始界面 -->
+      <div id="readyModal" class="popup-mask is-visible">
+        <div class="popup-container game-modal" id="startModal">
+          <img class="model-bg" src="./image/start-modal.png" />
+          <button class="default-btn start-btn" onclick="startTetrisGame()">
+            <img class="btn-img" src="./image/start-btn.png" />
+          </button>
+        </div>
+      </div>
+
+      <!-- 3.结束界面 -->
+      <div id="overModal" class="popup-mask">
+        <div class="popup-container game-modal">
+          <img class="model-bg" src="./image/over-modal.png" />
+
+          <button class="default-btn" onclick="leaveTetrisGame()">
+            <img class="btn-img" src="./image/over.png" />
+          </button>
+          <button class="default-btn again-btn" onclick="restartTetrisGame()">
+            <img class="btn-img" src="./image/again.png" />
+          </button>
+        </div>
+      </div>
+
+      <!-- 2.游戏界面 -->
+      <!-- =2.1 界面元素 -->
+      <!-- ==头部 -->
+      <div class="tetris-header">
+        <div class="header-content flex-row">
+          <div class="top-info left">
+            <img class="top-icon" src="./image/clock.png" />
+            <span id="tetrisClock" class="top-text">30</span>
+          </div>
+          <div class="top-info right">
+            <img class="top-icon" style="width: 26px" src="./image/star.png" />
+            <span id="tetrisScore" class="top-text">0</span>
+          </div>
+          <div class="row-line"></div>
+          <div class="col-line"></div>
+        </div>
+      </div>
+      <!-- ==底部 -->
+      <div class="tetris-footer">
+        <div class="down-icon flex-row">
+          <button class="default-btn" onclick="moveLeftAndRight(0)">
+            <img class="btn-img" src="./image/left-btn.png" />
+          </button>
+          <button class="default-btn" onclick="rotateBlock()">
+            <img class="btn-img" src="./image/rotate.png" />
+          </button>
+          <button class="default-btn" onclick="moveLeftAndRight(1)">
+            <img class="btn-img" src="./image/right-btn.png" />
+          </button>
+          <div class="col-line"></div>
         </div>
       </div>
     </div>
-    <script src="./js/vconsole.min.js"></script>
-    <script src="./js/ocrad.js"></script>
-    <script>
-      var vConsole = new VConsole();
-      var videoDom = document.querySelector("video");
-      // 一堆兼容代码
-      window.URL =
-        window.URL || window.webkitURL || window.mozURL || window.msURL;
-      if (navigator.mediaDevices === undefined) {
-        navigator.mediaDevices = {};
-      }
-      if (navigator.mediaDevices.getUserMedia === undefined) {
-        navigator.mediaDevices.getUserMedia = function (constraints) {
-          var getUserMedia =
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia ||
-            navigator.msGetUserMedia;
-          if (!getUserMedia) {
-            return Promise.reject(
-              new Error("getUserMedia is not implemented in this browser")
-            );
-          }
-          return new Promise(function (resolve, reject) {
-            getUserMedia.call(navigator, constraints, resolve, reject);
-          });
-        };
-      }
-
-      function recognize_snapshot() {
-        document.getElementById("text").innerText = "(Recognizing...)";
-        document.getElementById("transcription").className = "recognizing";
-        OCRAD(
-          document.getElementById("video"),
-          {
-            invert: document.getElementById("whiteText").checked, // set this for white on black text
-          },
-          function (text) {
-            document.getElementById("transcription").className = "done";
-            document.getElementById("text").innerText = text || "(empty)";
-          }
-        );
-      }
-
-      function acquiredVideo(stream) {
-        var video = document.getElementById("video");
-        if ("mozSrcObject" in video) {
-          video.mozSrcObject = stream;
-        } else if (window.webkitURL) {
-          video.src = window.webkitURL.createObjectURL(stream);
-        } else {
-          video.src = stream;
-        }
-        console.log("acquiredVideo", stream);
-        video.play();
-
-        document.getElementById("blackText").checked = true;
-      }
-
-      // 回调
-      function successFunc(stream) {
-        if ("srcObject" in videoDom) {
-          videoDom.srcObject = stream;
-        } else {
-          videoDom.src =
-            (window.URL && window.URL.createObjectURL(stream)) || stream;
-        }
-        videoDom.play();
-      }
-
-      window.onload = function () {
-        navigator.mediaDevices
-          .getUserMedia({
-            audio: false,
-            video: true,
-            facingMode: { exact: "environment" },
-          })
-          .then(successFunc)
-          .catch((err) => console.log("获取视频流错误", err));
-      };
-    </script>
+    <!-- =2.2 ar建模元素 -->
+    <!-- ==成像区 -->
+    <div id="arMain" class="ar-main"></div>
+    <script src="./js/main.js"></script>
   </body>
 </html>
