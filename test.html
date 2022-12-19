@@ -60,8 +60,11 @@
     </style>
   </head>
   <body>
+    <script src="./js/vconsole.min.js"></script>
     <script src="./js/ocrad.js"></script>
     <script>
+      var vConsole = new VConsole();
+
       function recognize_snapshot() {
         document.getElementById("text").innerText = "(Recognizing...)";
         document.getElementById("transcription").className = "recognizing";
@@ -86,21 +89,17 @@
         } else {
           video.src = stream;
         }
+        console.log("acquiredVideo", stream);
         video.play();
 
         document.getElementById("blackText").checked = true;
       }
       window.onload = function () {
-        navigator.getUserMedia =
-          navigator.getUserMedia ||
-          navigator.webkitGetUserMedia ||
-          navigator.mozGetUserMedia;
-        if (navigator.getUserMedia)
-          navigator.getUserMedia(
-            { video: true },
-            acquiredVideo,
-            function () {}
-          );
+        const videoDom = document.getElementById("video");
+        navigator.mediaDevices
+          .getUserMedia({ audio: true, video: true })
+          .then((stream) => (videoDom.srcObject = stream))
+          .catch((err) => console.log("获取视频流错误", err));
       };
     </script>
 
