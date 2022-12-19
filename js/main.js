@@ -2,10 +2,6 @@ var vConsole = new VConsole();
 
 //  Init
 
-var width = window.innerWidth,
-  height = window.innerHeight;
-console.log("window.innerWidth", width, height);
-
 // init renderer
 var renderer = new THREE.WebGLRenderer({
   antialias: true,
@@ -107,7 +103,7 @@ function initARContext() {
     tetrisArToolkitContext,
     tetrisMarkerRoot, {
       type: "pattern",
-      patternUrl: "https://ued.united-imaging.com/doc_server/doc_server/resource/src/9a3ca4a7d3a818ed6f14a1e7c995142b.patt",
+      patternUrl: "https://ued.united-imaging.com/doc_server/doc_server/resource/src/684ee5920fdec2cf5413ecb1ac9af18f.patt",
     }
   );
 }
@@ -194,8 +190,14 @@ let tetrisScore = 0;
 let tetrisSpeed = 800;
 let tetrisCanUpdate = false;
 const imgUrl = "./image/cell.png";
+const imgUrl1 = "./image/cell1.png";
 let tetrisCountDownNum = 30;
 let tetrisGameTimer = null;
+let tetrisTypes = []
+
+const ugameTetris = new UgameTetris({})
+
+console.log(1111, ugameTetris);
 
 //深度拷贝
 function copyArr(m) {
@@ -329,7 +331,7 @@ function generateTetrisCube() {
 
     return stopTetrisGame();
   }
-  let types = [
+  tetrisTypes = [
     new Cube(1, [
       [0, 3],
       [0, 4],
@@ -376,11 +378,11 @@ function generateTetrisCube() {
 
   // 随机生成七种形状之一
   if (nextTetrisCube == null) {
-    currentTetrisCube = types[Math.floor(Math.random() * 7)];
+    currentTetrisCube = tetrisTypes[Math.floor(Math.random() * 7)];
   } else {
     currentTetrisCube = nextTetrisCube;
   }
-  nextTetrisCube = types[Math.floor(Math.random() * 7)];
+  nextTetrisCube = tetrisTypes[Math.floor(Math.random() * 7)];
 
   let pos = currentTetrisCube.position;
   let nextPos = nextTetrisCube.position;
@@ -675,6 +677,7 @@ function moveLeftAndRight(type) {
 //更新视图矩阵
 function updateTetrisMatrixView(newPos) {
   if (tetrisCanUpdate) {
+    console.log(currentTetrisCube, tetrisTypes);
     let pos;
     //将之前的隐藏
     for (let i = 0; i < currentTetrisCube.position.length; i++) {
@@ -683,6 +686,12 @@ function updateTetrisMatrixView(newPos) {
     }
     //显示新的
     for (let i = 0; i < newPos.length; i++) {
+      // let tetrisCell1 = new THREE.TextureLoader().load(imgUrl);
+      // tetrisCell1.wrapS = tetrisCell1.mapT = THREE.RepeatWrapping;
+      // let material = new THREE.MeshLambertMaterial({
+      //   tetrisCell1,
+      //   side: THREE.DoubleSide,
+      // });
       tetrisMatrix[newPos[i][0]][newPos[i][1]].cube.visible = true;
     }
   }

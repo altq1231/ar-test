@@ -214,48 +214,57 @@ class Block {
   }
 }
 
-class Tetris {
-  constructor(info = {
-    colNum: 10,
-    rowNum: 20,
-    speed: 800,
-    points: 100,
-    statusChangeCallback: true,
-    scoreChangeCallback: true,
-    updateChangeCallback: true,
-    gameOverChangeCallback: true,
-    clearChangeCallback: true,
-    beforeClearChangeCallback: true
-  }) {
-    this.colNum = info.colNum
-    this.rowNum = info.rowNum
+class UgameTetris {
+  constructor({
+    size = [9, 9],
+    speed = 800,
+    points = 100,
+    countdown = 0,
+    layout = null,
+    statusChangeCallback = true,
+    scoreChangeCallback = true,
+    updateChangeCallback = true,
+    gameOverChangeCallback = true,
+    clearChangeCallback = true,
+    beforeClearChangeCallback = true,
+    countdownChangeCallBack = true
+  } = {}) {
+    this.colNum = size[0]
+    this.rowNum = size[1]
     this.blankLine = blankLine(this.colNum)
     this.fillLine = fillLine(this.colNum)
-    this.matrix = blankMatrix(this.rowNum, this.blankLine)
+    this.matrix = layout || blankMatrix(this.rowNum, this.blankLine)
     this.currentBlock = null
     this.nextBlock = null
     this.status = 'ready'
-    this.speed = info.speed
+    this.speed = speed
     this.fallInterval = null
     this.startLines = 0
     this.clearLines = []
     this.lock = false
-    this.points = info.points
+    this.points = points
     this.currentMatrix = this.matrix
     this.score = 0
+    this.countdown = countdown
+    this.gameTimer = null
+    this.startTime = null
+    this.time = null
+    this.millisecond = null
+    this.layout = layout
 
-    this.statusChangeCallback = info.statusChangeCallback
-    this.scoreChangeCallback = info.scoreChangeCallback
-    this.updateChangeCallback = info.updateChangeCallback
-    this.gameOverChangeCallback = info.gameOverChangeCallback
-    this.clearChangeCallback = info.clearChangeCallback
-    this.beforeClearChangeCallback = info.beforeClearChangeCallback
+    this.statusChangeCallback = statusChangeCallback
+    this.scoreChangeCallback = scoreChangeCallback
+    this.updateChangeCallback = updateChangeCallback
+    this.gameOverChangeCallback = gameOverChangeCallback
+    this.clearChangeCallback = clearChangeCallback
+    this.beforeClearChangeCallback = beforeClearChangeCallback
+    this.countdownChangeCallBack = countdownChangeCallBack
     this.initGame()
   }
 
   // 初始化游戏
   initGame() {
-    this.matrix = this.getStartMatrix(this.startLines)
+    this.matrix = this.layout || this.getStartMatrix(this.startLines)
     this.currentMatrix = this.matrix
     this.status = 'ready'
     this.startLines = 0
@@ -264,11 +273,12 @@ class Tetris {
     this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
       shape: blockShape[this.nextBlock],
       type: this.nextBlock
-    })
+    }, 'init')
   }
 
   // 开始游戏
   startGame() {
+    this.startTime = Date.now()
     if (this.currentBlock === null) {
       this.currentBlock = new Block({
         type: this.nextBlock
@@ -282,9 +292,20 @@ class Tetris {
     this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
       shape: blockShape[this.nextBlock],
       type: this.nextBlock
-    })
+    }, 'down')
     this.status = 'play'
     this.runStatusChangeCallback(this.status)
+    if (this.countdown > 0) {
+      this.gameTimer = setInterval(() => {
+        this.countdown--;
+        this.runCountdownChangeCallback(this.countdown)
+        if (this.countdown === 0) {
+          clearInterval(this.gameTimer)
+          this.gameTimer = null
+          this.gameOver()
+        }
+      }, 1000)
+    }
     this.autoRun(400)
   }
 
@@ -300,6 +321,10 @@ class Tetris {
     clearTimeout(this.fallInterval)
     this.status = 'ready'
     this.runStatusChangeCallback(this.status)
+    const nowT = Date.now()
+    this.millisecond = nowT - this.startTime
+    this.time = +(this.millisecond / 1000).toFixed(2)
+    this.runGameOverChangeCallback(this.score, this.time, this.millisecond)
   }
 
   // 自动下落
@@ -319,7 +344,7 @@ class Tetris {
         this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
           shape: blockShape[this.nextBlock],
           type: this.nextBlock
-        })
+        }, 'down')
         this.fallInterval = setTimeout(fallFunc, this.speed)
       } else {
         let matrix = JSON.parse(JSON.stringify(this.matrix))
@@ -353,14 +378,15 @@ class Tetris {
     this.matrix = matrix
     this.clearLines = this.isClear(matrix)
     if (this.clearLines.length > 0) {
-      console.log('isClear');
+      // console.log('isClear');
+      this.runBeforeClearChangeCallback(this.clearLines)
       this.clearLinesFunc(matrix, this.clearLines)
       this.autoRun()
       return
     }
 
     if (this.isOver(matrix)) {
-      console.log('isOver');
+      // console.log('isOver');
       this.gameOver()
       return
     }
@@ -376,7 +402,7 @@ class Tetris {
     this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
       shape: blockShape[this.nextBlock],
       type: this.nextBlock
-    })
+    }, 'down')
     this.autoRun(700)
   }
 
@@ -404,7 +430,6 @@ class Tetris {
 
   // 消除行
   clearLinesFunc(matrix, lines) {
-
     let newMatrix = JSON.parse(JSON.stringify(matrix))
     lines.forEach(n => {
       newMatrix.splice(n, 1)
@@ -422,35 +447,64 @@ class Tetris {
       propMatrix: newMatrix,
       cur: this.currentBlock
     })
-
     this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
       shape: blockShape[this.nextBlock],
       type: this.nextBlock
-    })
+    }, 'clearline')
+    this.runClearChangeCallback(lines)
   }
 
-
-  runUpdateChangeCallback(matrix, currentBlock, nextBlock) {
-    if (this.updateChangeCallback && typeof this.updateChangeCallback === 'function') {
-      this.updateChangeCallback(matrix, currentBlock, nextBlock)
+  // 倒计时变化触发
+  runCountdownChangeCallback(countdown) {
+    if (this.countdownChangeCallBack && typeof this.countdownChangeCallBack === 'function') {
+      this.countdownChangeCallBack(countdown)
     }
   }
 
+  // 游戏结束
+  runGameOverChangeCallback(score, time, millisecond) {
+    if (this.gameOverChangeCallback && typeof this.gameOverChangeCallback === 'function') {
+      this.gameOverChangeCallback(score, time, millisecond)
+    }
+  }
+
+  // 整行被削掉后触发
+  runClearChangeCallback(rows) {
+    if (this.clearChangeCallback && typeof this.clearChangeCallback === 'function') {
+      this.clearChangeCallback(rows)
+    }
+  }
+
+  // 整行被削掉前触发
+  runBeforeClearChangeCallback(rows) {
+    if (this.beforeClearChangeCallback && typeof this.beforeClearChangeCallback === 'function') {
+      this.beforeClearChangeCallback(rows)
+    }
+  }
+
+  // 每次画面发生变化时
+  runUpdateChangeCallback(matrix, currentBlock, nextBlock, action) {
+    if (this.updateChangeCallback && typeof this.updateChangeCallback === 'function') {
+      this.updateChangeCallback(matrix, currentBlock, nextBlock, action)
+    }
+  }
+
+  // 游戏状态变化
   runStatusChangeCallback(status) {
     if (this.statusChangeCallback && typeof this.statusChangeCallback === 'function') {
       this.statusChangeCallback(status)
     }
   }
 
+  // 游戏分数变化
   runScoreChangeCallback(score) {
     if (this.scoreChangeCallback && typeof this.scoreChangeCallback === 'function') {
       this.scoreChangeCallback(score)
     }
   }
 
-
   // 重新开始游戏
-  restartGame() {
+  reset() {
     clearTimeout(this.fallInterval)
     this.nextBlock = this.getNextType()
     this.currentBlock = null
@@ -468,6 +522,9 @@ class Tetris {
 
   // 旋转
   rotateBlock() {
+    if (this.status !== 'play') {
+      return
+    }
     if (this.currentBlock !== null) {
       if (this.status === 'pause') {
         return
@@ -488,12 +545,15 @@ class Tetris {
       this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
         shape: blockShape[this.nextBlock],
         type: this.nextBlock
-      })
+      }, 'rotate')
     }
   }
 
   // 左移
   moveLeft() {
+    if (this.status !== 'play') {
+      return
+    }
     if (this.currentBlock !== null) {
       if (this.status === 'pause') {
         return
@@ -517,7 +577,7 @@ class Tetris {
       this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
         shape: blockShape[this.nextBlock],
         type: this.nextBlock
-      })
+      }, 'left')
       const remain = this.speed - (Date.now() - timeStamp)
       this.autoRun(remain)
     }
@@ -525,6 +585,9 @@ class Tetris {
 
   // 右移
   moveRight() {
+    if (this.status !== 'play') {
+      return
+    }
     if (this.currentBlock !== null) {
       if (this.status === 'pause') {
         return
@@ -548,7 +611,7 @@ class Tetris {
       this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
         shape: blockShape[this.nextBlock],
         type: this.nextBlock
-      })
+      }, 'right')
       const remain = this.speed - (Date.now() - timeStamp)
       this.autoRun(remain)
     }
@@ -556,6 +619,9 @@ class Tetris {
 
   // 下降
   moveDown() {
+    if (this.status !== 'play') {
+      return
+    }
     clearTimeout(this.fallInterval)
     if (this.currentBlock !== null) {
       const cur = this.currentBlock;
@@ -575,7 +641,7 @@ class Tetris {
         this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
           shape: blockShape[this.nextBlock],
           type: this.nextBlock
-        })
+        }, 'drop')
         this.autoRun();
       } else {
         let matrix = JSON.parse(JSON.stringify(this.matrix));
@@ -599,7 +665,7 @@ class Tetris {
         this.runUpdateChangeCallback(this.currentMatrix, this.currentBlock, {
           shape: blockShape[this.nextBlock],
           type: this.nextBlock
-        })
+        }, 'drop')
         this.nextAround(matrix);
       }
     }
@@ -682,6 +748,7 @@ class Tetris {
       return true
     }))
   }
+
   // 是否达到消除状态
   isClear(matrix) {
     const clearLines = []
