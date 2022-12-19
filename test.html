@@ -12,21 +12,24 @@
     <style>
       body {
         background: whiteSmoke;
-        font-family: sans-serif;
-        margin: 30px;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        padding: 0 10px;
       }
       #transcription,
       #video {
         background: white;
-        display: inline-block;
         border: 1px solid #ddd;
-        margin: 10px;
+        margin: 10px 0;
       }
-      #video {
-        flex-grow: 1;
-        width: 500px;
-        background: black;
+      .top-video {
+        flex: 0 0 40%;
+        height: 40%;
+        width: 100%;
+        object-fit: cover;
       }
+
       #text {
         font-size: 25px;
         text-align: center;
@@ -34,7 +37,7 @@
         padding: 30px;
       }
       #transcription {
-        width: 300px;
+        width: 100%;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
@@ -57,9 +60,7 @@
     </style>
   </head>
   <body>
-    <h1>Webcam Ocrad.js Example</h1>
-
-    <script src="/js/ocrad.js"></script>
+    <script src="./js/ocrad.js"></script>
     <script>
       function recognize_snapshot() {
         document.getElementById("text").innerText = "(Recognizing...)";
@@ -103,15 +104,16 @@
       };
     </script>
 
-    <div id="main">
+    <div id="main" class="flex-col">
       <video
+        class="top-video"
         id="video"
-        src="img/StarWars.mp4"
+        src="https://ued.united-imaging.com/doc_server/doc_server/resource/src/faa22ad0d4cd6ec468690f53e91bc1f1.mp4"
         mute
         autoplay
         onclick="recognize_snapshot()"
       ></video>
-      <div id="transcription">
+      <div id="transcription" class="bottom-text fill-flex">
         <div id="text">Click on the video to recognize a still capture</div>
         <div id="controls">
           <input
